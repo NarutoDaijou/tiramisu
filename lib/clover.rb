@@ -98,3 +98,6 @@ module Tiramisu
     end
   end
 end
+
+require 'clover/util'
+require 'clover/run'
