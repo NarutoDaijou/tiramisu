@@ -90,4 +90,9 @@ describe :assert do
     x.verify
   end
 
+  it 'pass respond_to?' do
+    x = mock(:respond_to?, :__id__, true)
+    x.respond_to? :__id__, true
+    x.verify
+  end
 end
