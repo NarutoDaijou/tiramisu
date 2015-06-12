@@ -65,4 +65,17 @@ describe :assert do
     x.match :x
     x.verify
   end
+
+  it 'pass any?' do
+    m = mock(:any?)
+    m.any?
+    m.verify
+  end
+
+  it 'pass all?' do
+    x = mock(:all?, :x)
+    x.all? :x
+    x.verify
+  end
+
 end
