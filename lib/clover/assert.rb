@@ -31,5 +31,17 @@ module Clover
     def method_missing m, *a, &b
       __assert__(m, a, b)
     end
+
+    private
+    def __assert__ message, arguments, block
+      object = @block ? @block.call : @object
+      result = __send_message__(object, message, arguments, block)
+      return true if (@assert && result) || (@refute && !result)
+      throw(:__clover_status__, Clover::AssertionFailure.new(object, arguments, @caller))
+    end
+
+    def __send_message__ object, message, arguments, block
+      object.__send__(message, *arguments, &block)
+    end
   end
 end
