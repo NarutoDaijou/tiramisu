@@ -1,6 +1,17 @@
 module Clover
   class Unit
-
+    def __run__ test, before, around, after
+      __send__(before) if before
+      if around
+        __send__(around) {__send__(test)}
+      else
+        __send__(test)
+      end
+      __send__(after) if after
+      :__tiramisu_passed__
+    rescue Exception => e
+      throw(:__tiramisu_status__, e)
+    end
   end
 
   class << Unit
@@ -106,6 +117,16 @@ module Clover
 
     def hooks
       @__tiramisu_hooks__ ||= Tiramisu.void_hooks
+    end
+
+    def run test
+      tests[test] || raise(StandardError, 'Undefined test %s at "%s"' % [test.inspect, __identity__])
+      catch :__tiramisu_status__ do
+        allocate.__run__ tests[test],
+          hooks[:before][test] || hooks[:before][:__tiramisu_hooks_any__],
+          hooks[:around][test] || hooks[:around][:__tiramisu_hooks_any__],
+          hooks[:after][test]  || hooks[:after][:__tiramisu_hooks_any__]
+      end
     end
   end
 end
