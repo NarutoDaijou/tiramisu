@@ -1,5 +1,18 @@
 module Clover
   class Unit
+    # @example
+    #   assert(x) == y
+    #   assert(x).include?(y)
+    #   assert(x).nil?
+    [
+      :assert,
+      :refute
+    ].each do |meth|
+      define_method meth do |obj = nil, &block|
+        Clover::Assert.new(obj, meth, block, caller[0])
+      end
+    end
+
     def __run__ test, before, around, after
       __send__(before) if before
       if around
