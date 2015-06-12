@@ -13,6 +13,18 @@ module Clover
       end
     end
 
+    # stop executing current test and mark it as skipped
+    #
+    # @example
+    #   test :something do
+    #     skip "recheck this after fixing X"
+    #     assert(x) == y # this wont run
+    #   end
+    #
+    def skip reason = nil
+      throw(:__clover_status__, Clover::Skip.new(reason, caller[0]))
+    end
+
     def __run__ test, before, around, after
       __send__(before) if before
       if around
