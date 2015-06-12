@@ -78,4 +78,16 @@ describe :assert do
     x.verify
   end
 
+  it 'pass start_with?' do
+    x = mock(:start_with?, :x)
+    x.start_with? :x
+    x.verify
+  end
+
+  it 'pass end_with?' do
+    x = mock(:end_with?, :x)
+    x.end_with? :x
+    x.verify
+  end
+
 end
