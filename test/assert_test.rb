@@ -41,4 +41,17 @@ describe :assert do
     x <= :x
     x.verify
   end
+
+  it 'pass eql?' do
+    x = mock(:eql?, :x)
+    x.eql? :x
+    x.verify
+  end
+
+  it 'pass equal?' do
+    x = mock(:equal?, :x)
+    x.equal? :x
+    x.verify
+  end
+
 end
