@@ -2,7 +2,7 @@ require 'tty-progressbar'
 require 'tty-screen'
 require 'pastel'
 
-module Tiramisu
+module Clover
   extend self
 
   DEFAULT_PATTERN = '{spec,test}/**/{*_spec.rb,*_test.rb}'.freeze
@@ -65,10 +65,10 @@ module Tiramisu
     Class.new Unit do
       define_singleton_method(:__ancestors__) {ancestors}
       define_singleton_method(:__identity__) {identity}
-      Tiramisu::GLOBAL_SETUPS.each {|b| class_exec(&b)}
+      Clover::GLOBAL_SETUPS.each {|b| class_exec(&b)}
       # execute given block only after global setups executed and all utility methods defined
-      result = catch(:__tiramisu_skip__) {class_exec(&block)}
-      Tiramisu.skips << result if result.is_a?(Skip)
+      result = catch(:__clover_skip__) {class_exec(&block)}
+      Clover.skips << result if result.is_a?(Skip)
     end
   end
 

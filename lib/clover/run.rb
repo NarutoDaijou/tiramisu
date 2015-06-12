@@ -53,7 +53,7 @@ module Clover
   end
 
   def render_assertion_failure indent, failure
-    require 'tiramisu/pretty_print'
+    require 'clover/pretty_print'
     render_caller(indent, failure.caller)
     progress.log indent + cyan('a: ') + pp(failure.object)
     progress.log indent + cyan('b: ') + failure.arguments.map {|a| pp(a)}.join(', ')

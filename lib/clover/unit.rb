@@ -8,9 +8,9 @@ module Clover
         __send__(test)
       end
       __send__(after) if after
-      :__tiramisu_passed__
+      :__clover_passed__
     rescue Exception => e
-      throw(:__tiramisu_status__, e)
+      throw(:__clover_status__, e)
     end
   end
 
@@ -41,7 +41,7 @@ module Clover
     alias it test
 
     def tests
-      @__tiramisu_tests__ ||= {}
+      @__clover_tests__ ||= {}
     end
 
     # run some code before/around/after any or specific tests
@@ -108,24 +108,24 @@ module Clover
     ].each do |hook|
       define_method hook do |*tests,&block|
         block || raise(ArgumentError, 'block missing')
-        meth = :"__tiramisu_hooks_#{hook}_#{block.source_location.join}__"
-        tests = [:__tiramisu_hooks_any__] if tests.empty?
+        meth = :"__clover_hooks_#{hook}_#{block.source_location.join}__"
+        tests = [:__clover_hooks_any__] if tests.empty?
         tests.each {|t| (hooks[hook] ||= {})[t] = meth}
         define_method(meth, &block)
       end
     end
 
     def hooks
-      @__tiramisu_hooks__ ||= Tiramisu.void_hooks
+      @__clover_hooks__ ||= Clover.void_hooks
     end
 
     def run test
       tests[test] || raise(StandardError, 'Undefined test %s at "%s"' % [test.inspect, __identity__])
-      catch :__tiramisu_status__ do
+      catch :__clover_status__ do
         allocate.__run__ tests[test],
-          hooks[:before][test] || hooks[:before][:__tiramisu_hooks_any__],
-          hooks[:around][test] || hooks[:around][:__tiramisu_hooks_any__],
-          hooks[:after][test]  || hooks[:after][:__tiramisu_hooks_any__]
+          hooks[:before][test] || hooks[:before][:__clover_hooks_any__],
+          hooks[:around][test] || hooks[:around][:__clover_hooks_any__],
+          hooks[:after][test]  || hooks[:after][:__clover_hooks_any__]
       end
     end
   end
