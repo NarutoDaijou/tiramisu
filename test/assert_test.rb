@@ -6,7 +6,6 @@ describe :assert do
     x.verify
   end
 
-
   it 'pass ===' do
     x = mock(:===, :x)
     x === :x
@@ -19,4 +18,27 @@ describe :assert do
     x.verify
   end
 
+  it 'pass >' do
+    x = mock(:>, :x)
+    x > :x
+    x.verify
+  end
+
+  it 'pass >=' do
+    x = mock(:>=, :x)
+    x >= :x
+    x.verify
+  end
+
+  it 'pass <' do
+    x = mock(:<, :x)
+    x < :x
+    x.verify
+  end
+
+  it 'pass <=' do
+    x = mock(:<=, :x)
+    x <= :x
+    x.verify
+  end
 end
