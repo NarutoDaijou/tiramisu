@@ -97,8 +97,13 @@ module Clover
       define_singleton_method(:included) {|b| b.class_exec(&block)}
     end
   end
+
+  def void_hooks
+    {before: {}, around: {}, after: {}}
+  end
 end
 
+require 'clover/core_ext'
 require 'clover/util'
 require 'clover/unit'
 require 'clover/assert'
