@@ -71,4 +71,16 @@ module Kernel
   def assert label, &block
     Clover.assertions[label.to_sym] = block || raise(ArgumentError, 'missing block')
   end
+
+  # stop executing any code and report a failure
+  #
+  # @example
+  #   x > y || fail('x should be greater than y')
+  #
+  # @param reason
+  #
+  def fail *reason
+    reason.empty? && raise(ArgumentError, 'Wrong number or arguments, 0 for 1+')
+    throw(:__clover_status__, Clover::GenericFailure.new(reason, caller[0]))
+  end
 end
