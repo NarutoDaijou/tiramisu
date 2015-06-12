@@ -144,6 +144,18 @@ module Clover
       @__clover_hooks__ ||= Clover.void_hooks
     end
 
+    # skipping a whole spec/context
+    #
+    # @example
+    #   spec Array do
+    #     skip
+    #
+    #     # code here wont be executed
+    #   end
+    def skip reason = nil
+      throw(:__clover_skip__, Clover::Skip.new(reason, caller[0]))
+    end
+
     def run test
       tests[test] || raise(StandardError, 'Undefined test %s at "%s"' % [test.inspect, __identity__])
       catch :__clover_status__ do
