@@ -54,4 +54,15 @@ describe :assert do
     x.verify
   end
 
+  it 'pass =~' do
+    x = mock(:=~, :x)
+    x =~ :x
+    x.verify
+  end
+
+  it 'pass match' do
+    x = mock(:match, :x)
+    x.match :x
+    x.verify
+  end
 end
