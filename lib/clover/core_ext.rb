@@ -46,4 +46,29 @@ module Kernel
     # but can be included in another specs/contexts
     Clover.define_unit_module(block)
   end
+
+  # when used out of tests it defines a assertion helper.
+  # the block should return a no-false no-nil value for assertion to pass.
+  # the block will receive tested object as first argument
+  # and any arguments passed to assertion as consequent ones.
+  # it will also receive the passed block.
+  #
+  # @example checks whether two arrays has same keys, orderlessly
+  #   assert :has_same_keys_as do |a, b|
+  #     a.keys.sort == b.keys.sort
+  #   end
+  #
+  #   spec :some_spec do
+  #     test :some_test do
+  #       a = [1, 2]
+  #       b = [2, 1]
+  #       assert(a).has_same_keys_as(b) # => true
+  #     end
+  #   end
+  #
+  # @param label
+  #
+  def assert label, &block
+    Clover.assertions[label.to_sym] = block || raise(ArgumentError, 'missing block')
+  end
 end
