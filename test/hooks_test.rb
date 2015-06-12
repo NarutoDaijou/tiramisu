@@ -22,4 +22,15 @@ describe :hooks do
     end
     assert_equal 1, called
   end
+
+  it 'prefers named hooks over wildcard ones' do
+    called = nil
+    spec rand do
+      around(:a) {called = :named}
+      around {called = :wildcard}
+      test(:a) {}
+      run(:a)
+    end
+    assert_equal :named, called
+  end
 end
