@@ -101,4 +101,5 @@ end
 
 require 'clover/util'
 require 'clover/unit'
+require 'clover/assert'
 require 'clover/run'
