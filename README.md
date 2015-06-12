@@ -1,8 +1,16 @@
 # Clover
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/clover`. To experiment with that code, run `bin/console` for an interactive prompt.
+**The simplicity never was simpler**
 
-TODO: Delete this and the text above, and describe your gem
+Clover is a super-simple testing library for Ruby.
+
+Its API consist of just 10(yes, ten!) memorable methods:
+
+- spec, context
+- before, around, after
+- test
+- assert, refute
+- skip, fail
 
 ## Installation
 
