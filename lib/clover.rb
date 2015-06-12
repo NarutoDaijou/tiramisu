@@ -100,4 +100,5 @@ module Tiramisu
 end
 
 require 'clover/util'
+require 'clover/unit'
 require 'clover/run'
