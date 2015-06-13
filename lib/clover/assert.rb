@@ -34,7 +34,11 @@ module Clover
 
     private
     def __assert__ message, arguments, block
-      object = @block ? @block.call : @object
+      object = if message == :raises
+        @block || raise(ArgumentError, '%s expects a block' % message)
+      else
+        @block ? @block.call : @object
+      end
       result = __send_message__(object, message, arguments, block)
       return true if (@assert && result) || (@refute && !result)
       throw(:__clover_status__, Clover::AssertionFailure.new(object, arguments, @caller))
