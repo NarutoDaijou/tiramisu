@@ -42,4 +42,22 @@ describe :raises do
     assert r.class == Clover::GenericFailure
     assert r.reason.any? {|l| l =~ /to match/}
   end
+
+  it 'should fail if nothing raised and validation block given' do
+    r = raisetest(proc {}) {}
+    assert r.class == Clover::GenericFailure
+    assert r.reason.any? {|l| l =~ /Expected a exception to be raised/}
+  end
+
+  it 'should pass if given block validates exception' do
+    r = raisetest(proc {|e| e.class == NameError}) {x}
+    assert_equal true, r
+  end
+
+  it 'should fail if  given block does not validate exception' do
+    p = proc {|e| e.class == ArgumentError}
+    r = raisetest(p) {x}
+    assert r.class == Clover::GenericFailure
+    assert r.reason.any? {|l| l =~ /did not raise as expected/}
+  end
 end
