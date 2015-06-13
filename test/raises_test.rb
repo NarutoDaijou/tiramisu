@@ -20,4 +20,15 @@ describe :raises do
     assert r.class == Clover::GenericFailure
     assert r.reason.any? {|l| l =~ /Expected a exception to be raised/}
   end
+
+  it 'should pass if type matching' do
+    r = raisetest(NameError) {x}
+    assert_equal true, r
+  end
+
+  it 'should fail if wrong exception raised' do
+    r = raisetest(ArgumentError) {x}
+    assert r.class == Clover::GenericFailure
+    assert r.reason.any? {|l| l =~ /Expected a ArgumentError to be raised/}
+  end
 end
