@@ -15,18 +15,18 @@ assert :raises do |proc, type, message, &block|
       fail('Looks like the block at %s:%s did not raise as expected' % source_location)
   end
 
-  if expected_type
-    type == expected_type ||
+  if type
+    type == type ||
       fail('Expected a %s to be raised at %s:%s' % [
-          expected_type,
+          type,
           *source_location
         ],
         'Instead a %s raised' % type
       )
   end
 
-  if expected_message
-    regexp = expected_message.is_a?(Regexp) ? expected_message : /\A#{expected_message}\z/
+  if message
+    regexp = message.is_a?(Regexp) ? message : /\A#{message}\z/
     message =~ regexp ||
       fail(
         'Expected the exception raised at %s:%s' % source_location,
@@ -35,4 +35,5 @@ assert :raises do |proc, type, message, &block|
         message ? message : message.inspect
       )
   end
+  true
 end
