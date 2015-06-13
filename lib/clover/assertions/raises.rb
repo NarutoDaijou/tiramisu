@@ -27,6 +27,13 @@ module Clover
   end
 
   def raised_expected_type? type, expected_type, source_location
+    return if type == expected_type
+    fail('Expected a %s to be raised at %s:%s' % [
+        expected_type,
+        *source_location
+      ],
+      'Instead a %s raised' % type
+    )
   end
 
   def raised_expected_message? message, expected_message, source_location
