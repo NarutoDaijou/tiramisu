@@ -41,6 +41,9 @@ module Clover
     end
 
     def __send_message__ object, message, arguments, block
+      if assertion = Clover.assertions[message.to_sym]
+        return assertion.call(object, *arguments, &block)
+      end
       object.__send__(message, *arguments, &block)
     end
   end
