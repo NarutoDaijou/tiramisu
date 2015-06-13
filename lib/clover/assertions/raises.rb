@@ -22,6 +22,8 @@ module Clover
   end
 
   def raised? x, source_location
+    return if x.is_a?(Exception)
+    fail('Expected a exception to be raised at %s:%s' % source_location)
   end
 
   def raised_expected_type? type, expected_type, source_location
