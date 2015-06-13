@@ -37,6 +37,14 @@ module Clover
   end
 
   def raised_expected_message? message, expected_message, source_location
+    regexp = expected_message.is_a?(Regexp) ? expected_message : /\A#{expected_message}\z/
+    return if message =~ regexp
+    fail(
+      'Expected the exception raised at %s:%s' % source_location,
+      'to match "%s"' % regexp.source,
+      'Instead it looks like',
+      message ? message : message.inspect
+    )
   end
 
   def raised_as_expected_by_block? exception, block, source_location
