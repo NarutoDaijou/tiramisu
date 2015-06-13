@@ -48,5 +48,7 @@ module Clover
   end
 
   def raised_as_expected_by_block? exception, block, source_location
+    return if block.call(exception)
+    fail('Looks like the block at %s:%s did not raise as expected' % source_location)
   end
 end
