@@ -14,4 +14,9 @@ describe :throws do
     r = throwstest(:x, :y) {throw :x, :y}
     assert_equal true, r
   end
+
+  it 'should fail when wrong symbol thrown' do
+    r = throwstest(:x) {throw :y}
+    assert r.reason.any? {|l| l =~ /Instead :y symbol thrown/}
+  end
 end
