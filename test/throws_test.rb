@@ -24,4 +24,9 @@ describe :throws do
     r = throwstest(:x) {}
     assert r.reason.any? {|l| l =~ /Expected.+to throw :x symbol/}
   end
+
+  it 'should fail when wrong value thrown' do
+    r = throwstest(:x, :z) {throw :x, :y}
+    assert r.reason.any? {|l| l =~ /Expected value: :z/}
+  end
 end
