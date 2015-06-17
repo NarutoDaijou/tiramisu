@@ -19,4 +19,9 @@ describe :throws do
     r = throwstest(:x) {throw :y}
     assert r.reason.any? {|l| l =~ /Instead :y symbol thrown/}
   end
+
+  it 'should fail when no symbol thrown' do
+    r = throwstest(:x) {}
+    assert r.reason.any? {|l| l =~ /Expected.+to throw :x symbol/}
+  end
 end
