@@ -64,6 +64,7 @@ module Tiramisu
       define_method(tests[label], &block)
     end
     alias it test
+    alias should test
 
     def tests
       @__tiramisu_tests__ ||= {}
