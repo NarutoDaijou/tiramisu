@@ -9,4 +9,9 @@ describe :throws do
     r = throwstest(:x) {throw :x}
     assert_equal true, r
   end
+
+  it 'should pass when correct symbol and value thrown' do
+    r = throwstest(:x, :y) {throw :x, :y}
+    assert_equal true, r
+  end
 end
