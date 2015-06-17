@@ -34,17 +34,17 @@ module Kernel
 
     if noargs
       # no arguments given, defining a global setup and returning
-      return Clover::GLOBAL_SETUPS << block
+      return Tiramisu::GLOBAL_SETUPS << block
     end
 
     if label
       # a no-nil no-false argument given, defining a regular spec
-      Clover.define_and_register_a_spec(label, block)
+      Tiramisu.define_and_register_a_spec(label, block)
     end
 
     # defining a shared spec that wont run itself
     # but can be included in another specs/contexts
-    Clover.define_unit_module(block)
+    Tiramisu.define_unit_module(block)
   end
 
   # when used out of tests it defines a assertion helper.
@@ -69,7 +69,7 @@ module Kernel
   # @param label
   #
   def assert label, &block
-    Clover.assertions[label.to_sym] = block || raise(ArgumentError, 'missing block')
+    Tiramisu.assertions[label.to_sym] = block || raise(ArgumentError, 'missing block')
   end
 
   # stop executing any code and report a failure
@@ -81,6 +81,6 @@ module Kernel
   #
   def fail *reason
     reason.empty? && raise(ArgumentError, 'Wrong number or arguments, 0 for 1+')
-    throw(:__clover_status__, Clover::GenericFailure.new(reason, caller[0]))
+    throw(:__tiramisu_status__, Tiramisu::GenericFailure.new(reason, caller[0]))
   end
 end

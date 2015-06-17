@@ -1,16 +1,16 @@
 assert :raises do |proc, type, message, &block|
-  Clover.raised_as_expected?(proc, type, message, block)
+  Tiramisu.raised_as_expected?(proc, type, message, block)
   true # if arriving here without failing the assertion is passed
 end
 
-module Clover
+module Tiramisu
   def raised_as_expected? proc, expected_type, expected_message, block
     e = nil
     begin
       proc.call
     rescue Exception => e
     end
-    source_location = Clover.relative_source_location(proc)
+    source_location = Tiramisu.relative_source_location(proc)
     raised?(e, source_location)
     return raised_as_expected_by_block?(e, block, source_location) if block
     if expected_type

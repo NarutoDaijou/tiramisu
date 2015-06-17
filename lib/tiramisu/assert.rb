@@ -1,4 +1,4 @@
-module Clover
+module Tiramisu
   class Assert
 
     def initialize object, action = :assert, block = nil, caller = nil
@@ -41,11 +41,11 @@ module Clover
       end
       result = __send_message__(object, message, arguments, block)
       return true if (@assert && result) || (@refute && !result)
-      throw(:__clover_status__, Clover::AssertionFailure.new(object, arguments, @caller))
+      throw(:__tiramisu_status__, Tiramisu::AssertionFailure.new(object, arguments, @caller))
     end
 
     def __send_message__ object, message, arguments, block
-      if assertion = Clover.assertions[message.to_sym]
+      if assertion = Tiramisu.assertions[message.to_sym]
         return assertion.call(object, *arguments, &block)
       end
       object.__send__(message, *arguments, &block)

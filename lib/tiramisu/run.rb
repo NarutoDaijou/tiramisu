@@ -1,4 +1,4 @@
-module Clover
+module Tiramisu
   def progress
     @progress ||= TTY::ProgressBar.new ':current of :total [:bar]' do |cfg|
       cfg.total = units.map {|u| u.tests.size}.reduce(:+) || 0
@@ -17,7 +17,7 @@ module Clover
         if status.is_a?(Skip)
           skips << status
         else
-          status == :__clover_passed__ || render_failure(unit, unit.tests[test], status)
+          status == :__tiramisu_passed__ || render_failure(unit, unit.tests[test], status)
         end
         progress.advance
       end
@@ -53,7 +53,7 @@ module Clover
   end
 
   def render_assertion_failure indent, failure
-    require 'clover/pretty_print'
+    require 'tiramisu/pretty_print'
     render_caller(indent, failure.caller)
     progress.log indent + cyan('a: ') + pp(failure.object)
     progress.log indent + cyan('b: ') + failure.arguments.map {|a| pp(a)}.join(', ')

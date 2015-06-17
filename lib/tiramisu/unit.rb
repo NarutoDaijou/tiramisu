@@ -1,4 +1,4 @@
-module Clover
+module Tiramisu
   class Unit
     # @example
     #   assert(x) == y
@@ -9,7 +9,7 @@ module Clover
       :refute
     ].each do |meth|
       define_method meth do |obj = nil, &block|
-        Clover::Assert.new(obj, meth, block, caller[0])
+        Tiramisu::Assert.new(obj, meth, block, caller[0])
       end
     end
 
@@ -22,7 +22,7 @@ module Clover
     #   end
     #
     def skip reason = nil
-      throw(:__clover_status__, Clover::Skip.new(reason, caller[0]))
+      throw(:__tiramisu_status__, Tiramisu::Skip.new(reason, caller[0]))
     end
 
     def __run__ test, before, around, after
@@ -33,9 +33,9 @@ module Clover
         __send__(test)
       end
       __send__(after) if after
-      :__clover_passed__
+      :__tiramisu_passed__
     rescue Exception => e
-      throw(:__clover_status__, e)
+      throw(:__tiramisu_status__, e)
     end
   end
 
@@ -51,7 +51,7 @@ module Clover
     # @param &block
     def context label, &block
       return unless block
-      Clover.define_and_register_a_context(label, block, self)
+      Tiramisu.define_and_register_a_context(label, block, self)
     end
 
     # define a test
@@ -60,13 +60,13 @@ module Clover
     # @param &block
     def test label, &block
       return unless block
-      tests[label] = Clover.identity_string(:test, label, block)
+      tests[label] = Tiramisu.identity_string(:test, label, block)
       define_method(tests[label], &block)
     end
     alias it test
 
     def tests
-      @__clover_tests__ ||= {}
+      @__tiramisu_tests__ ||= {}
     end
 
     # run some code before/around/after any or specific tests
@@ -133,15 +133,15 @@ module Clover
     ].each do |hook|
       define_method hook do |*tests,&block|
         block || raise(ArgumentError, 'block missing')
-        meth = :"__clover_hooks_#{hook}_#{block.source_location.join}__"
-        tests = [:__clover_hooks_any__] if tests.empty?
+        meth = :"__tiramisu_hooks_#{hook}_#{block.source_location.join}__"
+        tests = [:__tiramisu_hooks_any__] if tests.empty?
         tests.each {|t| (hooks[hook] ||= {})[t] = meth}
         define_method(meth, &block)
       end
     end
 
     def hooks
-      @__clover_hooks__ ||= Clover.void_hooks
+      @__tiramisu_hooks__ ||= Tiramisu.void_hooks
     end
 
     # skipping a whole spec/context
@@ -153,16 +153,16 @@ module Clover
     #     # code here wont be executed
     #   end
     def skip reason = nil
-      throw(:__clover_skip__, Clover::Skip.new(reason, caller[0]))
+      throw(:__tiramisu_skip__, Tiramisu::Skip.new(reason, caller[0]))
     end
 
     def run test
       tests[test] || raise(StandardError, 'Undefined test %s at "%s"' % [test.inspect, __identity__])
-      catch :__clover_status__ do
+      catch :__tiramisu_status__ do
         allocate.__run__ tests[test],
-          hooks[:before][test] || hooks[:before][:__clover_hooks_any__],
-          hooks[:around][test] || hooks[:around][:__clover_hooks_any__],
-          hooks[:after][test]  || hooks[:after][:__clover_hooks_any__]
+          hooks[:before][test] || hooks[:before][:__tiramisu_hooks_any__],
+          hooks[:around][test] || hooks[:around][:__tiramisu_hooks_any__],
+          hooks[:after][test]  || hooks[:after][:__tiramisu_hooks_any__]
       end
     end
   end

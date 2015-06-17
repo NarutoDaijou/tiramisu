@@ -4,12 +4,12 @@ describe :skip do
     r, w = IO.pipe
     fork do
       r.close
-      s = Clover.define_spec :skip_spec, proc {
+      s = Tiramisu.define_spec :skip_spec, proc {
         test(:a) {}
         skip
         test(:b) {}
       }
-      w.print({skips: Clover.skips.size, tests: s.tests.size}.to_json)
+      w.print({skips: Tiramisu.skips.size, tests: s.tests.size}.to_json)
     end
     w.close
     data = JSON.parse(r.read)
@@ -22,15 +22,15 @@ describe :skip do
     fork do
       r.close
       buffer = []
-      Clover.define_and_register_a_spec :skip_test, proc {
+      Tiramisu.define_and_register_a_spec :skip_test, proc {
         test :x do
           buffer << 'a'
           skip
           buffer << 'b'
         end
       }
-      Clover.run
-      w.print({skips: Clover.skips.size, buffer: buffer}.to_json)
+      Tiramisu.run
+      w.print({skips: Tiramisu.skips.size, buffer: buffer}.to_json)
     end
     w.close
     data = JSON.parse(r.read)

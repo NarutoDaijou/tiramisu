@@ -25,10 +25,10 @@ require 'coderay'
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-module Clover
+module Tiramisu
   def pp obj
     out = ''
-    q = Clover::PrettyPrint.new(out)
+    q = Tiramisu::PrettyPrint.new(out)
     q.guard_inspect_key { q.pp(obj) }
     q.flush
     out

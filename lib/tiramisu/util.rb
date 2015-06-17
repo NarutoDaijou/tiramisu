@@ -1,4 +1,4 @@
-module Clover
+module Tiramisu
   def identity_string type, label, block
     '%s %s (%s:%s)' % [
       blue(type),

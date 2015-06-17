@@ -1,6 +1,6 @@
 require 'json'
 require 'minitest/autorun'
-require 'clover'
+require 'tiramisu'
 
 module Minitest
   class Mock
@@ -15,7 +15,7 @@ module Minitest
 end
 
 def proxy obj
-  Clover::Assert.new(obj)
+  Tiramisu::Assert.new(obj)
 end
 
 def mock meth, *args, &block

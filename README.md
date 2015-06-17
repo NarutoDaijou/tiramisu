@@ -1,8 +1,8 @@
-# Clover
+# Tiramisu
 
 **The simplicity never was simpler**
 
-Clover is a super-simple testing library for Ruby.
+Tiramisu is a super-simple testing library for Ruby.
 
 Its API consist of just 10(yes, ten!) memorable methods:
 
@@ -17,7 +17,7 @@ Its API consist of just 10(yes, ten!) memorable methods:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'clover'
+gem 'tiramisu'
 ```
 
 And then execute:
@@ -26,7 +26,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install clover
+    $ gem install tiramisu
 
 ## Usage
 
@@ -40,7 +40,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/clover/fork )
+1. Fork it ( https://github.com/[my-github-username]/tiramisu/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-name, version = 'clover 0.0.0'.split
+name, version = 'tiramisu 0.0.0'.split
 Gem::Specification.new do |spec|
   spec.name          = name
   spec.version       = version
