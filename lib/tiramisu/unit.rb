@@ -12,6 +12,7 @@ module Tiramisu
         Tiramisu::Assert.new(obj, meth, block, caller[0])
       end
     end
+    alias expect assert
 
     # stop executing current test and mark it as skipped
     #

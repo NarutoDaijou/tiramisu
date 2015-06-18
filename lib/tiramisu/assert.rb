@@ -1,10 +1,17 @@
 module Tiramisu
   class Assert
-    EXCEPTIONAL_ASSERTIONS = {
+    BUNDLED_ASSERTIONS = {
       :raises  => true,
       'raises' => true,
+      
+      :to_raise  => true,
+      'to_raise' => true,
+      
       :throws  => true,
-      'throws' => true
+      'throws' => true,
+      
+      :to_throw  => true,
+      'to_throw' => true
     }.freeze
 
     def initialize object, action = :assert, block = nil, caller = nil
@@ -40,7 +47,7 @@ module Tiramisu
 
     private
     def __assert__ message, arguments, block
-      object = if EXCEPTIONAL_ASSERTIONS[message]
+      object = if BUNDLED_ASSERTIONS[message]
         @block || raise(ArgumentError, '%s expects a block' % message)
       else
         @block ? @block.call : @object
