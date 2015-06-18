@@ -1,4 +1,4 @@
-assert :raises do |proc, type, message, &block|
+assert :raises, :to_raise do |proc, type, message, &block|
   Tiramisu.raised_as_expected?(proc, type, message, block)
   true # if arriving here without failing the assertion is passed
 end
