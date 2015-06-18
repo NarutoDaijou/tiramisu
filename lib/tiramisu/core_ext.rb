@@ -66,10 +66,26 @@ module Kernel
   #     end
   #   end
   #
-  # @param label
+  # @example same assertion by multiple names
+  #   assert :includes, :to_include do |a, b|
+  #     a.keys.sort == b.keys.sort
+  #   end
   #
-  def assert label, &block
-    Tiramisu.assertions[label.to_sym] = block || raise(ArgumentError, 'missing block')
+  #   spec :some_spec do
+  #     test :some_test do
+  #       a = [1, 2]
+  #       assert(a).includes(1) # => true
+  #       # same
+  #       expect(a).to_include(1) # => true
+  #     end
+  #   end
+  #
+  # @param [Array] *labels
+  #
+  def assert *labels, &block
+    labels.any? || raise(ArgumentError, 'Wrong number of arguments, 0 for 1+')
+    block || raise(ArgumentError, 'missing block')
+    labels.each {|label| Tiramisu.assertions[label.to_sym] = block}
   end
 
   # stop executing any code and report a failure
