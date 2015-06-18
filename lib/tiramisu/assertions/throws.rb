@@ -1,4 +1,4 @@
-assert :throws do |proc, expected_symbol, expected_value|
+assert :throws, :to_throw do |proc, expected_symbol, expected_value|
   thrown_symbol, thrown_value = Tiramisu.catch_symbol(proc, expected_symbol)
   if expected_symbol
     unless expected_symbol == thrown_symbol
