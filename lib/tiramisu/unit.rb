@@ -4,6 +4,8 @@ module Tiramisu
     #   assert(x) == y
     #   assert(x).include?(y)
     #   assert(x).nil?
+    #   refute(a).include?(b)
+    #   fail_if(a).include?(b)
     [
       :assert,
       :refute
@@ -13,6 +15,7 @@ module Tiramisu
       end
     end
     alias expect assert
+    alias fail_if refute
 
     # stop executing current test and mark it as skipped
     #
