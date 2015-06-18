@@ -24,4 +24,16 @@ describe :context_inheritance_test do
     assert_equal true, x
   end
 
+  it 'inherits from parent spec through parent context' do
+    x = nil
+    spec rand do
+      define_method(:set_x) {x = true}
+      context rand do
+        context rand do
+          allocate.send(:set_x)
+        end
+      end
+    end
+    assert_equal true, x
+  end
 end
