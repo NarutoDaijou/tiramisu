@@ -36,4 +36,19 @@ describe :context_inheritance_test do
     end
     assert_equal true, x
   end
+
+  it 'does not inherit tests' do
+    spec_tests, context_tests = nil
+    spec rand do
+      test(:x) {}
+      context rand do
+        context_tests = tests.size
+      end
+      spec_tests = tests.size
+    end
+    assert_equal 1, spec_tests
+    assert_equal 0, context_tests
+
+  end
+
 end
