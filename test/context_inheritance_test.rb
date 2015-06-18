@@ -48,7 +48,18 @@ describe :context_inheritance_test do
     end
     assert_equal 1, spec_tests
     assert_equal 0, context_tests
-
   end
 
+  it 'does not inherit hooks' do
+    spec_hooks, context_hooks = nil
+    spec rand do
+      before {}
+      context rand do
+        context_hooks = hooks[:before].size
+      end
+      spec_hooks = hooks[:before].size
+    end
+    assert_equal 1, spec_hooks
+    assert_equal 0, context_hooks
+  end
 end
