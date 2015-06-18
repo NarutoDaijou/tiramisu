@@ -62,7 +62,7 @@ module Tiramisu
   # @return [Unit]
   def define_unit_class type, label, block, ancestors
     identity = identity_string(type, label, block).freeze
-    Class.new Unit do
+    Class.new ancestors.last || Unit do
       define_singleton_method(:__ancestors__) {ancestors}
       define_singleton_method(:__identity__) {identity}
       Tiramisu::GLOBAL_SETUPS.each {|b| class_exec(&b)}
