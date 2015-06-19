@@ -11,7 +11,7 @@ module Tiramisu
       :refute
     ].each do |meth|
       define_method meth do |obj = nil, &block|
-        Tiramisu::Assert.new(obj, meth, block, caller[0])
+        __assertions__.push(Tiramisu::Assert.new(obj, meth, block, caller[0])).last
       end
     end
     alias expect assert
@@ -40,6 +40,10 @@ module Tiramisu
       :__tiramisu_passed__
     rescue Exception => e
       throw(:__tiramisu_status__, e)
+    end
+
+    def __assertions__
+      @__assertions__ ||= []
     end
   end
 
