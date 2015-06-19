@@ -32,5 +32,13 @@ describe :receive do
   end
 
   it 'should fail when unexpected message received' do
+    this = self
+    spec rand do
+      test :test do
+        mock = fail_if(:x).receive(:class)
+        mock.class
+      end
+      this.assert run(:test).is_a?(Tiramisu::Failures::UnexpectedMessageReceived)
+    end
   end
 end
