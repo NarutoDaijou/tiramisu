@@ -22,6 +22,13 @@ describe :receive do
   end
 
   it 'should pass when no message expected and no message received' do
+    this = self
+    spec rand do
+      test :test do
+        mock = fail_if(:x).receive(:class)
+      end
+      this.assert_equal :__tiramisu_passed__, run(:test)
+    end
   end
 
   it 'should fail when unexpected message received' do
