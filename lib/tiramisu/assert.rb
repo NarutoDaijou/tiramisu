@@ -3,13 +3,13 @@ module Tiramisu
     BUNDLED_ASSERTIONS = {
       :raises  => true,
       'raises' => true,
-      
+
       :to_raise  => true,
       'to_raise' => true,
-      
+
       :throws  => true,
       'throws' => true,
-      
+
       :to_throw  => true,
       'to_throw' => true
     }.freeze
@@ -45,7 +45,57 @@ module Tiramisu
       __assert__(m, a, b)
     end
 
+    # check the tested object receives given message(s)
+    #
+    # @example
+    #   test :auth do
+    #     user = assert(User.new).receive(:password)
+    #     user.authenticate
+    #     # by the end of test user should receive :password message, otherwise the test will fail
+    #   end
+    #
+    # @example alternate syntax
+    #   user = expect(User.new).to_receive(:password)
+    #
+    # @param [Symbol, Array] a message or a array of expected messages
+    # @return [Mock]
+    #
+    def receive expected_messages
+      __expected_messages__.push([expected_messages, Mock.new(@object)]).last.last
+    end
+    alias to_receive receive
+
+    class Mock
+      def initialize object
+        @object = object
+      end
+
+      instance_methods.each do |m|
+        define_method m do |*a, &b|
+          __register_and_send__(m, a, b)
+        end
+      end
+
+      def method_missing m, *a, &b
+        __register_and_send__(m, a, b)
+      end
+
+      def __received_messages__
+        @__received_messages__ ||= {}
+      end
+
+      private
+      def __register_and_send__ m, a, b
+        (@__received_messages__[m] ||= []).push([a, b])
+        @object.__send__(m, *a, &b)
+      end
+    end
+
     private
+    def __expected_messages__
+      @__expected_messages__ ||= []
+    end
+
     def __assert__ message, arguments, block
       object = if BUNDLED_ASSERTIONS[message]
         @block || raise(ArgumentError, '%s expects a block' % message)
