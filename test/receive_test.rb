@@ -12,6 +12,13 @@ describe :receive do
   end
 
   it 'should fail when a expected message not received' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect(:x).to_receive(:class)
+      end
+      this.assert run(:test).is_a?(Tiramisu::Failures::ExpectedMessageNotReceived)
+    end
   end
 
   it 'should pass when no message expected and no message received' do
