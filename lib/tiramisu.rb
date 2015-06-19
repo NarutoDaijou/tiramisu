@@ -8,8 +8,6 @@ module Tiramisu
   DEFAULT_PATTERN = '{spec,test}/**/{*_spec.rb,*_test.rb}'.freeze
   GLOBAL_SETUPS = []
 
-  AssertionFailure = Struct.new(:object, :arguments, :caller)
-  GenericFailure   = Struct.new(:reason, :caller)
   Skip = Struct.new(:reason, :caller)
 
   INDENT = '  '.freeze
@@ -104,6 +102,8 @@ module Tiramisu
 end
 
 require 'tiramisu/core_ext'
+require 'tiramisu/failures'
+require 'tiramisu/mock'
 require 'tiramisu/util'
 require 'tiramisu/unit'
 require 'tiramisu/assert'

@@ -37,6 +37,7 @@ module Tiramisu
         __send__(test)
       end
       __send__(after) if after
+      __assertions__.each(&:__validate_expected_messages__)
       :__tiramisu_passed__
     rescue Exception => e
       throw(:__tiramisu_status__, e)

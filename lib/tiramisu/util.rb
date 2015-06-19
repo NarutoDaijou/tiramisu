@@ -19,7 +19,7 @@ module Tiramisu
   end
 
   def pretty_backtrace e
-    Array(e.backtrace).dup.select! {|l| l =~ /\A#{pwd}/}.map! {|l| relative_location(l)}
+    Array(e.backtrace).map {|l| relative_location(l)}
   end
 
   def readline caller

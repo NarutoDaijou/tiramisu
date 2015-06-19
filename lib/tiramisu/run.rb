@@ -37,10 +37,13 @@ module Tiramisu
     case failure
     when Exception
       render_exception(indent, failure)
-    when AssertionFailure
-      render_assertion_failure(indent, failure)
-    when GenericFailure
-      render_generic_failure(indent, failure)
+    when Failures::Generic,
+        Failures::Assertion,
+        Failures::ExpectedMessageNotReceived,
+        Failures::UnexpectedMessageReceived
+      require 'tiramisu/pretty_print'
+      render_caller(indent, failure.caller)
+      __send__('render_%s_failure' % failure.class.name.split('::').last, indent, failure)
     else
       progress.log(indent + failure.inspect)
     end
@@ -52,16 +55,27 @@ module Tiramisu
     pretty_backtrace(failure).each {|l| progress.log(indent + l)}
   end
 
-  def render_assertion_failure indent, failure
-    require 'tiramisu/pretty_print'
-    render_caller(indent, failure.caller)
+  def render_Generic_failure indent, failure
+    failure.reason.each {|l| progress.log indent + underline.bright_red(l)}
+  end
+
+  def render_Assertion_failure indent, failure
     progress.log indent + cyan('a: ') + pp(failure.object)
     progress.log indent + cyan('b: ') + failure.arguments.map {|a| pp(a)}.join(', ')
   end
 
-  def render_generic_failure indent, failure
-    render_caller(indent, failure.caller)
-    failure.reason.each {|l| progress.log indent + underline.bright_red(l)}
+  def render_ExpectedMessageNotReceived_failure indent, failure
+    progress.log indent + ('Expected %s to receive %s message' % [
+      pp(failure.object),
+      pp(failure.expected_message)
+    ])
+  end
+
+  def render_UnexpectedMessageReceived_failure indent, failure
+    progress.log indent + ('Not Expected %s to receive %s message' % [
+      pp(failure.object),
+      pp(failure.message)
+    ])
   end
 
   def render_caller indent, caller

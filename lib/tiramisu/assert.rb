@@ -20,6 +20,7 @@ module Tiramisu
       @caller = caller
       @assert = action == :assert
       @refute = action == :refute
+      @assert || @refute || raise(ArgumentError, 'action should be either :assert or :refute')
     end
 
     instance_methods.each do |m|
@@ -61,33 +62,25 @@ module Tiramisu
     # @return [Mock]
     #
     def receive expected_messages
-      __expected_messages__.push([expected_messages, Mock.new(@object)]).last.last
+      __expected_messages__.push([Array(expected_messages), Mock.new(@object)]).last.last
     end
     alias to_receive receive
 
-    class Mock
-      def initialize object
-        @object = object
-      end
-
-      instance_methods.each do |m|
-        define_method m do |*a, &b|
-          __register_and_send__(m, a, b)
+    def __validate_expected_messages__
+      __expected_messages__.each do |(expected_messages,mock)|
+        expected_messages.each do |expected_message|
+          if @assert
+            throw(
+              :__tiramisu_status__,
+              Failures::ExpectedMessageNotReceived.new(expected_message, @object, @caller)
+            ) unless mock.__received_messages__[expected_message]
+          else
+            throw(
+              :__tiramisu_status__,
+              Failures::UnexpectedMessageReceived.new(expected_message, @object, @caller)
+            ) if mock.__received_messages__[expected_message]
+          end
         end
-      end
-
-      def method_missing m, *a, &b
-        __register_and_send__(m, a, b)
-      end
-
-      def __received_messages__
-        @__received_messages__ ||= {}
-      end
-
-      private
-      def __register_and_send__ m, a, b
-        (@__received_messages__[m] ||= []).push([a, b])
-        @object.__send__(m, *a, &b)
       end
     end
 
@@ -104,7 +97,7 @@ module Tiramisu
       end
       result = __send_message__(object, message, arguments, block)
       return true if (@assert && result) || (@refute && !result)
-      throw(:__tiramisu_status__, Tiramisu::AssertionFailure.new(object, arguments, @caller))
+      throw(:__tiramisu_status__, Failures::Assertion.new(object, arguments, @caller))
     end
 
     def __send_message__ object, message, arguments, block
