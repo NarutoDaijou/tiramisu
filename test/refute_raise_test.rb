@@ -14,4 +14,10 @@ describe :raises do
     r = raisetest {}
     assert_equal true, r
   end
+
+  it 'should fail if exception raised when not expected' do
+    r = raisetest {x}
+    assert r.class == Tiramisu::Failures::Generic
+    assert r.reason.any? {|l| l =~ /unexpected NameError raised/}
+  end
 end
