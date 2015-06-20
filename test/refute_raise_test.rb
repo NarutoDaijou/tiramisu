@@ -20,4 +20,10 @@ describe :raises do
     assert r.class == Tiramisu::Failures::Generic
     assert r.reason.any? {|l| l =~ /unexpected NameError raised/}
   end
+
+  it 'should pass if it raises a exception type different from negated one' do
+    r = raisetest(ArgumentError) {x}
+    assert_equal true, r
+  end
+
 end

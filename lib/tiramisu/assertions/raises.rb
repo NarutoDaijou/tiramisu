@@ -11,7 +11,7 @@ module Tiramisu
     end
     source_location = Tiramisu.relative_source_location(proc)
 
-    f = raised_anything?(e, source_location, negate)
+    f = raised_anything?(e, source_location, negate, expected_type || expected_message || block)
     return f if f
 
     if block
@@ -31,12 +31,18 @@ module Tiramisu
     nil
   end
 
-  def raised_anything? x, source_location, negate
+  def raised_anything? x, source_location, negate, should_raise = false
     if negate
-      return 'A unexpected %s raised at %s:%s' % [
-        x.class.name,
-        *source_location
-      ] if x.is_a?(Exception)
+      if should_raise
+        return [
+          'Expected a exception to be raised at %s:%s' % source_location
+        ] unless x.is_a?(Exception)
+      else
+        return 'A unexpected %s raised at %s:%s' % [
+          x.class.name,
+          *source_location
+        ] if x.is_a?(Exception)
+      end
     else
       return [
         'Expected a exception to be raised at %s:%s' % source_location
