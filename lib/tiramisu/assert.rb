@@ -46,7 +46,45 @@ module Tiramisu
       __assert__(m, a, b)
     end
 
-    # ensure the given block raises a exception
+    # ensure the given block raises as expected
+    #
+    # @example assertion pass if block raises whatever
+    #   assert {some code}.raise
+    #
+    # @example assertion pass if block raises NameError
+    #   assert {some code}.raise NameError
+    #
+    # @example assertion pass if block raises NameError and error message matches /blah/
+    #   assert {some code}.raise NameError, /blah/
+    #
+    # @example assertion pass if block raises whatever error that matches /blah/
+    #   assert {some code}.raise nil, /blah/
+    #
+    # @example assertion pass if validation block returns a positive value
+    #   assert {some code}.raise {|e| e.is_a?(NameError) && e.message =~ /blah/}
+    #
+    #
+    # @example assertion pass if nothing raised
+    #   refute {some code}.raise
+    #   # same
+    #   fail_if {some code}.raise
+    #
+    # @example assertion fails only if block raises a NameError.
+    #   it may raise whatever but NameError. if nothing raised assertion will fail.
+    #
+    #   fail_if {some code}.raise NameError
+    #
+    # @example assertion pass if raised error does not match /blah/
+    #   if nothing raised assertion will fail.
+    #
+    #   fail_if {some code}.raise nil, /blah/
+    #
+    # @example assertion will pass if raised error is not a NameError
+    #   and error message does not match /blah/
+    #   if nothing raised assertion will fail as well.
+    #
+    #   fail_if {some code}.raise NameError, /blah/
+    #
     def raise type = nil, message = nil, &block
       failure = Tiramisu.raised_as_expected?(@block, type, message, block, @refute)
       return true if failure.nil?

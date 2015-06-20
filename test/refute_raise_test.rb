@@ -60,4 +60,10 @@ describe :raises do
     assert r.class == Tiramisu::Failures::Generic
     assert r.reason.any? {|l| l =~ /Not expected raised exception to match \/undefined/}
   end
+
+  it 'should pass if raised type is not of negated type and message does not raise negated message' do
+    r = raisetest(ArgumentError, /blah/) {x}
+    assert_equal true, r
+  end
+
 end

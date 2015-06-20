@@ -20,8 +20,14 @@ module Tiramisu
     end
 
     if expected_type
-      f = raised_expected_type?(e.class, expected_type, source_location, negate)
-      return f if f
+      type_failed = raised_expected_type?(e.class, expected_type, source_location, negate)
+      if negate && expected_message
+        message_failed = raised_expected_message?(e.message, expected_message, source_location, negate)
+        return if type_failed && message_failed
+        return    type_failed || message_failed
+      else
+        return type_failed if type_failed
+      end
     end
 
     if expected_message
