@@ -92,6 +92,12 @@ module Tiramisu
     end
     alias to_raise raise
 
+    # ensure given block thrown as expected
+    #
+    def throw symbol = nil, value = nil, &block
+      Tiramisu.thrown_as_expected?(@block, symbol, value, block, negate)
+    end
+
     # check the tested object receives given message(s)
     #
     # @example
