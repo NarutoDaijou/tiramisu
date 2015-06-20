@@ -61,5 +61,6 @@ module Tiramisu
   end
 end
 
-require 'tiramisu/util/raise'
+require 'tiramisu/util/assert_raise'
+require 'tiramisu/util/refute_raise'
 require 'tiramisu/util/throw'
