@@ -72,4 +72,9 @@ describe :raises do
     assert r.reason.any? {|l| l =~ /Not expected raised exception to be of type NameError/}
   end
 
+  it 'should fail if raised type is of negated type' do
+    r = raisetest(ArgumentError, /undefined local variable or method/) {x}
+    assert r.class == Tiramisu::Failures::Generic
+    assert r.reason.any? {|l| l =~ /Not expected raised exception to match \/undefined/}
+  end
 end
