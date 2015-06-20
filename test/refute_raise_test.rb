@@ -66,4 +66,10 @@ describe :raises do
     assert_equal true, r
   end
 
+  it 'should fail if raised type is of negated type' do
+    r = raisetest(NameError, /blah/) {x}
+    assert r.class == Tiramisu::Failures::Generic
+    assert r.reason.any? {|l| l =~ /Not expected raised exception to be of type NameError/}
+  end
+
 end
