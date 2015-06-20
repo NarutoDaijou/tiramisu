@@ -33,6 +33,12 @@ describe :raises do
     assert r.reason.any? {|l| l =~ /Expected a exception to be raised/}
   end
 
+  it 'should fail if a validation block provided but nothing raised' do
+    r = raisetest(proc {}) {}
+    assert r.class == Tiramisu::Failures::Generic
+    assert r.reason.any? {|l| l =~ /Expected a exception to be raised/}
+  end
+
   it 'should pass if it raises a exception type different from negated one' do
     r = raisetest(ArgumentError) {x}
     assert_equal true, r
