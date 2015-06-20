@@ -46,6 +46,14 @@ module Tiramisu
       __assert__(m, a, b)
     end
 
+    # ensure the given block raises a exception
+    def raise type = nil, message = nil, &block
+      failure = Tiramisu.raised_as_expected?(@block, type, message, block, @refute)
+      return true if failure.nil?
+      Failures::Generic.new(Array(failure), @caller)
+    end
+    alias to_raise raise
+
     # check the tested object receives given message(s)
     #
     # @example

@@ -3,9 +3,9 @@ describe :raises do
     catch :__tiramisu_status__ do
       assert = Tiramisu::Assert.new(nil, :assert, block)
       if type.is_a?(Proc)
-        assert.raises(&type)
+        assert.raise(&type)
       else
-        assert.raises(type, message)
+        assert.raise(type, message)
       end
     end
   end

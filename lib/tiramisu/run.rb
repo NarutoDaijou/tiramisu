@@ -56,7 +56,7 @@ module Tiramisu
   end
 
   def render_Generic_failure indent, failure
-    failure.reason.each {|l| progress.log indent + underline.bright_red(l)}
+    Array(failure.reason).each {|l| progress.log indent + underline.bright_red(l)}
   end
 
   def render_Assertion_failure indent, failure
