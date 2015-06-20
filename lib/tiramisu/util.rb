@@ -94,3 +94,6 @@ module Tiramisu
     s.to_sym
   end
 end
+
+require 'tiramisu/util/raise'
+require 'tiramisu/util/throw'

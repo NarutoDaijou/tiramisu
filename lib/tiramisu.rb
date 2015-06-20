@@ -53,11 +53,12 @@ module Tiramisu
 
   # define a class that will hold contexts and tests
   #
-  # @param  [Proc] block
-  # @param  [String, Symbol] label
   # @param  [String, Symbol] type
+  # @param  [String, Symbol] label
+  # @param  [Proc] block
   # @param  [Array] ancestors
   # @return [Unit]
+  #
   def define_unit_class type, label, block, ancestors
     identity = identity_string(type, label, block).freeze
     Class.new ancestors.last || Unit do
@@ -74,6 +75,7 @@ module Tiramisu
   #
   # @param  [Proc] block
   # @return [Module]
+  #
   def define_unit_module block
     block || raise(ArgumentError, 'missing block')
     Module.new do
@@ -104,9 +106,7 @@ end
 require 'tiramisu/core_ext'
 require 'tiramisu/failures'
 require 'tiramisu/mock'
-require 'tiramisu/util/generic'
-require 'tiramisu/util/raise'
+require 'tiramisu/util'
 require 'tiramisu/unit'
 require 'tiramisu/assert'
 require 'tiramisu/run'
-require 'tiramisu/assertions/throws'
