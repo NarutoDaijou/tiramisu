@@ -54,4 +54,10 @@ describe :raises do
     r = raisetest(nil, 'blah') {x}
     assert_equal true, r
   end
+
+  it 'should fail if it raises a exception with a message matching negated one' do
+    r = raisetest(nil, /undefined local variable or method/) {x}
+    assert r.class == Tiramisu::Failures::Generic
+    assert r.reason.any? {|l| l =~ /Not expected raised exception to match \/undefined/}
+  end
 end
