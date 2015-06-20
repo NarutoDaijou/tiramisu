@@ -1,18 +1,5 @@
 module Tiramisu
   class Assert
-    BUNDLED_ASSERTIONS = {
-      :raises  => true,
-      'raises' => true,
-
-      :to_raise  => true,
-      'to_raise' => true,
-
-      :throws  => true,
-      'throws' => true,
-
-      :to_throw  => true,
-      'to_throw' => true
-    }.freeze
 
     def initialize object, action = :assert, block = nil, caller = nil
       @object = object
@@ -95,7 +82,9 @@ module Tiramisu
     # ensure given block thrown as expected
     #
     def throw symbol = nil, value = nil, &block
-      Tiramisu.thrown_as_expected?(@block, symbol, value, block, negate)
+      failure = Tiramisu.thrown_as_expected?(@block, symbol, value, block, @refute)
+      return true if failure.nil?
+      Failures::Generic.new(Array(failure), @caller)
     end
 
     # check the tested object receives given message(s)
@@ -129,11 +118,11 @@ module Tiramisu
     private
     def __validate_expected_message__ expected_message, mock
       if @assert
-        throw(:__tiramisu_status__,
+        Kernel.throw(:__tiramisu_status__,
           Failures::ExpectedMessageNotReceived.new(expected_message, @object, @caller)
         ) unless mock.__received_messages__[expected_message]
       else
-        throw(:__tiramisu_status__,
+        Kernel.throw(:__tiramisu_status__,
           Failures::UnexpectedMessageReceived.new(expected_message, @object, @caller)
         ) if mock.__received_messages__[expected_message]
       end
@@ -144,14 +133,10 @@ module Tiramisu
     end
 
     def __assert__ message, arguments, block
-      object = if BUNDLED_ASSERTIONS[message]
-        @block || raise(ArgumentError, '%s expects a block' % message)
-      else
-        @block ? @block.call : @object
-      end
+      object = @block ? @block.call : @object
       result = __send_message__(object, message, arguments, block)
       return true if (@assert && result) || (@refute && !result)
-      throw(:__tiramisu_status__, Failures::Assertion.new(object, arguments, @caller))
+      Kernel.throw(:__tiramisu_status__, Failures::Assertion.new(object, arguments, @caller))
     end
 
     def __send_message__ object, message, arguments, block

@@ -1,7 +1,7 @@
 describe :throws do
   def throwstest *args, &block
     catch :__tiramisu_status__ do
-      Tiramisu::Assert.new(nil, :assert, block).throws(*args)
+      Tiramisu::Assert.new(nil, :assert, block).throw(*args)
     end
   end
 
