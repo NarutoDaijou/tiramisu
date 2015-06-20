@@ -73,7 +73,11 @@ module Tiramisu
     #   fail_if {some code}.raise NameError, /blah/
     #
     def raise type = nil, message = nil, &block
-      failure = Tiramisu.raised_as_expected?(@block, type, message, block, @refute)
+      failure = if @assert
+        Tiramisu.assert_raised_as_expected(@block, type, message, block)
+      else
+        Tiramisu.refute_raised_as_expected(@block, type, message, block)
+      end
       return true if failure.nil?
       Failures::Generic.new(Array(failure), @caller)
     end
