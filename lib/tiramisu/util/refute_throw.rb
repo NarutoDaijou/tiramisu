@@ -4,7 +4,7 @@ module Tiramisu
     thrown_symbol, thrown_value = Tiramisu.catch_symbol(proc, expected_symbol)
     source_location = Tiramisu.relative_source_location(proc)
 
-    f = refute_thrown(thrown_symbol, source_location)
+    f = refute_thrown(thrown_symbol, source_location, expected_symbol || expected_value)
     return f if f
 
     if expected_symbol
@@ -19,10 +19,16 @@ module Tiramisu
     nil
   end
 
-  def refute_thrown thrown_symbol, source_location
-    return [
-      'Not expected a symbol to be thrown at %s:%s' % source_location
-    ] if thrown_symbol
+  def refute_thrown thrown_symbol, source_location, should_throw = false
+    if should_throw
+      return [
+        'Expected a symbol to be thrown at %s:%s' % source_location
+      ] unless thrown_symbol
+    else
+      return [
+        'Not expected a symbol to be thrown at %s:%s' % source_location
+      ] if thrown_symbol
+    end
     nil
   end
 
