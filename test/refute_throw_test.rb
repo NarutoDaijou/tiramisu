@@ -10,4 +10,9 @@ describe :refute_throw do
     assert_equal true, r
   end
 
+  it 'should fail when something thrown' do
+    r = refute_throw {throw :x}
+    assert r.reason.any? {|l| l =~ /Not expected a symbol to be thrown/}
+  end
+
 end
