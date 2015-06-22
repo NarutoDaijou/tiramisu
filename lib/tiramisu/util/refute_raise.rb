@@ -1,6 +1,7 @@
 module Tiramisu
 
-  # call the given block and check whether it raised any exception.
+  # call the given block and check it raises nothing
+  # or raised something but given error type or message.
   # if everything raised as expected return nil,
   # otherwise return a failure
   def refute_raised_as_expected proc, expected_type, expected_message, block
@@ -20,13 +21,8 @@ module Tiramisu
     end
 
     if expected_type
-      type_failed = refute_raised_expected_type(e.class, expected_type, source_location)
-      if expected_message
-        message_failed = refute_raised_expected_message(e.message, expected_message, source_location)
-        return if type_failed && message_failed
-        return    type_failed || message_failed
-      end
-      return type_failed if type_failed
+      f = refute_raised_expected_type(e.class, expected_type, source_location)
+      return f if f
     end
 
     if expected_message
@@ -60,7 +56,7 @@ module Tiramisu
 
   def refute_raised_expected_type type, expected_type, source_location
     return [
-      'Not expected raised exception to be of type %s' % type,
+      'Not expected a %s to be raised' % type,
       'at %s:%s' % source_location
     ] if type == expected_type
     nil

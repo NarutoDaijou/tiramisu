@@ -47,7 +47,7 @@ describe :raises do
   it 'should fail if it raises a exception of same type as negated one' do
     r = raisetest(NameError) {x}
     assert r.class == Tiramisu::Failures::Generic
-    assert r.reason.any? {|l| l =~ /Not expected raised exception to be of type NameError/}
+    assert r.reason.any? {|l| l =~ /Not expected a NameError to be raised/}
   end
 
   it 'should pass if it raises a exception with a message different from negated one' do
@@ -61,7 +61,7 @@ describe :raises do
     assert r.reason.any? {|l| l =~ /Not expected raised exception to match \/undefined/}
   end
 
-  it 'should pass if raised type is not of negated type and message does not raise negated message' do
+  it 'should pass if raised type is not of negated type and error message does not match negated message' do
     r = raisetest(ArgumentError, /blah/) {x}
     assert_equal true, r
   end
@@ -69,10 +69,10 @@ describe :raises do
   it 'should fail if raised type is of negated type' do
     r = raisetest(NameError, /blah/) {x}
     assert r.class == Tiramisu::Failures::Generic
-    assert r.reason.any? {|l| l =~ /Not expected raised exception to be of type NameError/}
+    assert r.reason.any? {|l| l =~ /Not expected a NameError to be raised/}
   end
 
-  it 'should fail if raised type is of negated type' do
+  it 'should fail if error message matches negated one' do
     r = raisetest(ArgumentError, /undefined local variable or method/) {x}
     assert r.class == Tiramisu::Failures::Generic
     assert r.reason.any? {|l| l =~ /Not expected raised exception to match \/undefined/}
