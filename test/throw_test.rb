@@ -17,12 +17,12 @@ describe :throws do
 
   it 'should fail when wrong symbol thrown' do
     r = throwstest(:x) {throw :y}
-    assert r.reason.any? {|l| l =~ /Instead :y symbol thrown/}
+    assert r.reason.any? {|l| l =~ /Instead :y thrown/}
   end
 
   it 'should fail when no symbol thrown' do
     r = throwstest(:x) {}
-    assert r.reason.any? {|l| l =~ /Expected.+to throw :x symbol/}
+    assert r.reason.any? {|l| l =~ /Expected :x to be thrown/}
   end
 
   it 'should fail when wrong value thrown' do

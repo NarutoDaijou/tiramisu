@@ -86,7 +86,11 @@ module Tiramisu
     # ensure given block thrown as expected
     #
     def throw symbol = nil, value = nil, &block
-      failure = Tiramisu.thrown_as_expected?(@block, symbol, value, block, @refute)
+      failure = if @assert
+        Tiramisu.assert_thrown_as_expected(@block, symbol, value, block)
+      else
+        Tiramisu.refute_thrown_as_expected(@block, symbol, value, block)
+      end
       return true if failure.nil?
       Failures::Generic.new(Array(failure), @caller)
     end
