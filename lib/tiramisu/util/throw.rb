@@ -22,7 +22,6 @@ module Tiramisu
   def assert_thrown thrown_symbol, source_location
     return if thrown_symbol
     'Expected a symbol to be thrown at %s:%s' % source_location
-    nil
   end
 
   def assert_expected_symbol_thrown thrown_symbol, expected_symbol, source_location
