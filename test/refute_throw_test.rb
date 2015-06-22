@@ -20,4 +20,8 @@ describe :refute_throw do
     assert r.reason.any? {|l| l =~ /Expected a symbol to be thrown/}
   end
 
+  it 'should fail when a negated value expected and nothing thrown' do
+    r = refute_throw(nil, 'blah') {}
+    assert r.reason.any? {|l| l =~ /Expected a symbol to be thrown/}
+  end
 end
