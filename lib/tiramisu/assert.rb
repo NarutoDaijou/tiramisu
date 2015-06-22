@@ -7,7 +7,7 @@ module Tiramisu
       @caller = caller
       @assert = action == :assert
       @refute = action == :refute
-      @assert || @refute || raise(ArgumentError, 'action should be either :assert or :refute')
+      @assert || @refute || Kernel.raise(ArgumentError, 'action should be either :assert or :refute')
     end
 
     instance_methods.each do |m|
@@ -73,6 +73,9 @@ module Tiramisu
     #   fail_if {some code}.raise NameError, /blah/
     #
     def raise type = nil, message = nil, &block
+      if block && (type || message)
+        Kernel.raise(ArgumentError, 'Both arguments and a block given, please use either one')
+      end
       failure = if @assert
         Tiramisu.assert_raised_as_expected(@block, type, message, block)
       else
@@ -85,7 +88,28 @@ module Tiramisu
 
     # ensure given block thrown as expected
     #
+    # @example assertion pass if any symbol thrown
+    #   assert {some code}.throw
+    #
+    # @example assertion pass only if :x symbol thrown
+    #   assert {some code}.throw(:x)
+    #
+    # @example assertion pass only if :x symbol with :y value thrown
+    #   assert {some code}.throw(:x, :y)
+    #
+    # @example assertion pass only if :x symbol with a value that match /y/ thrown
+    #   assert {some code}.throw(:x, /y/)
+    #
+    # @example assertion pass when any symbol thrown with :y value
+    #   assert {some code}.throw(nil, :y)
+    #
+    # @example assertion pass when any symbol thrown with a value that match /y/ thrown
+    #   assert {some code}.throw(nil, /y/)
+    #
     def throw symbol = nil, value = nil, &block
+      if block && (symbol || value)
+        Kernel.raise(ArgumentError, 'Both arguments and a block given, please use either one')
+      end
       failure = if @assert
         Tiramisu.assert_thrown_as_expected(@block, symbol, value, block)
       else

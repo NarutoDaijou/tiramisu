@@ -7,6 +7,10 @@ module Tiramisu
     f = assert_thrown(thrown_symbol, source_location)
     return f if f
 
+    # validation by block would be ambiguous here
+    # cause to get thrown value we need to know the expected symbol
+    # which should be passed as argument and we can pass either argument(s) or block, not both
+
     if expected_symbol
       f = assert_expected_symbol_thrown(thrown_symbol, expected_symbol, source_location)
       return f if f
