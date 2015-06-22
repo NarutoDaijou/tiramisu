@@ -107,13 +107,16 @@ module Tiramisu
     #   assert {some code}.throw(nil, /y/)
     #
     def throw symbol = nil, value = nil, &block
-      if block && (symbol || value)
-        Kernel.raise(ArgumentError, 'Both arguments and a block given, please use either one')
+      if block
+        # validation by block would be ambiguous here
+        # cause to get thrown value we need to know the expected symbol which should be passed as argument
+        # and accepting both arguments and block would be confusing
+        Kernel.raise(ArgumentError, '`throw` does not accept a block')
       end
       failure = if @assert
-        Tiramisu.assert_thrown_as_expected(@block, symbol, value, block)
+        Tiramisu.assert_thrown_as_expected(@block, symbol, value)
       else
-        Tiramisu.refute_thrown_as_expected(@block, symbol, value, block)
+        Tiramisu.refute_thrown_as_expected(@block, symbol, value)
       end
       return true if failure.nil?
       Failures::Generic.new(Array(failure), @caller)

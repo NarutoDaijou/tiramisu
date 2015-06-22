@@ -64,3 +64,5 @@ end
 require 'tiramisu/util/assert_raise'
 require 'tiramisu/util/refute_raise'
 require 'tiramisu/util/throw'
+require 'tiramisu/util/assert_throw'
+require 'tiramisu/util/refute_throw'
