@@ -18,7 +18,7 @@ describe :raises do
   it 'should fail if exception raised when not expected' do
     r = raisetest {x}
     assert r.class == Tiramisu::Failures::Generic
-    assert r.reason.any? {|l| l =~ /unexpected NameError raised/}
+    assert r.reason.any? {|l| l =~ /A unexpected exception raised/}
   end
 
   it 'should fail if exception of specific type negated but nothing raised' do

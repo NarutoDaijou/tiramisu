@@ -38,9 +38,9 @@ module Tiramisu
         'Expected a exception to be raised at %s:%s' % source_location
       ] unless x.is_a?(Exception)
     else
-      return 'A unexpected %s raised at %s:%s' % [
-        x.class.name,
-        *source_location
+      return [
+        'A unexpected exception raised at %s:%s' % source_location,
+        '%s "%s"' % [x.class.name, x.message]
       ] if x.is_a?(Exception)
     end
     nil
