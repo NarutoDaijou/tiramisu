@@ -25,17 +25,22 @@ describe :refute_throw do
     assert r.reason.any? {|l| l =~ /Not expected :x to be thrown/}
   end
 
-  it 'should fail when thrown symbol does match negated one and value does not' do
+  it 'should pass when nor negated symbol nor value matching thrown ones' do
+    r = refute_throw(:a, :b) {throw :x, :y}
+    assert_equal true, r
+  end
+
+  it 'should fail when thrown symbol does match negated one but value does not' do
     r = refute_throw(:x, :a) {throw :x, :b}
     assert r.reason.any? {|l| l =~ /Not expected :x to be thrown/}
   end
 
-  it 'should fail when a negated symbol expected and nothing thrown' do
+  it 'should fail when a negated symbol given and nothing thrown' do
     r = refute_throw(:x) {}
     assert r.reason.any? {|l| l =~ /Expected a symbol to be thrown/}
   end
 
-  it 'should fail when a negated value expected and nothing thrown' do
+  it 'should fail when a negated value given and nothing thrown' do
     r = refute_throw(nil, 'blah') {}
     assert r.reason.any? {|l| l =~ /Expected a symbol to be thrown/}
   end
