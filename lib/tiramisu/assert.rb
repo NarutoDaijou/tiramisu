@@ -138,7 +138,8 @@ module Tiramisu
     # @return [Mock]
     #
     def receive *expected_messages
-      __mocks__.push(Mock.new(@object, expected_messages, @assert)).last
+      expected_messages.any? || Kernel.raise(ArgumentError, 'Wrong number of arguments, 0 for 1+')
+      __mocks__.push(Mock.new(@object, expected_messages, @assert, @caller)).last
     end
     alias to_receive receive
 

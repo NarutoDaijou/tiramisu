@@ -1,7 +1,10 @@
 module Tiramisu
   class Mock
-    def initialize object, expected_messages, assert = true
-      @object, @expected_messages, @assert = object, expected_messages.freeze, assert
+    def initialize object, expected_messages, assert, caller
+      @object = object
+      @expected_messages = expected_messages.freeze
+      @assert = assert
+      @caller = caller
     end
 
     instance_methods.each do |m|
@@ -14,17 +17,31 @@ module Tiramisu
       __register_and_send__(m, a, b)
     end
 
+    def with *args
+      @assert || Kernel.raise(StandardError, '`with` only works with positive assertions')
+      @with = if @expected_messages.size > 1
+        args.size == @expected_messages.size ||
+          Kernel.raise(ArgumentError, "Wrong number of arguments, #{args.size} for #{@expected_messages.size}")
+        args.all? {|x| x.is_a?(Array)} ||
+          Kernel.raise(ArgumentError, 'Please provide expected arguments as arrays, one array per expected message')
+        args
+      else
+        [args]
+      end
+    end
+
     def __received_messages__
       @__received_messages__ ||= {}
     end
 
     def __validate__
-      @expected_messages.each do |expected_message|
+      @expected_messages.each_with_index do |msg,i|
         if @assert
-          __assert_message_received__(expected_message)
+          __assert_message_received__(msg)
         else
-          __refute_message_received__(expected_message)
+          return __refute_message_received__(msg)
         end
+        __assert_message_received_with_correct_arguments__(msg, i)
       end
     end
 
@@ -39,6 +56,12 @@ module Tiramisu
       Kernel.throw(:__tiramisu_status__,
         Failures::UnexpectedMessageReceived.new(expected_message, @object, @caller)
       ) if __received_messages__[expected_message]
+    end
+
+    def __assert_message_received_with_correct_arguments__ msg, i
+      return unless @with
+      __received_messages__[msg].find do |(args,_)|
+      end || Kernel.throw(:__tiramisu_status__, Failures::Generic.new())
     end
 
     def __register_and_send__ m, a, b
