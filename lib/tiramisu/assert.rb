@@ -137,38 +137,18 @@ module Tiramisu
     # @param [Symbol, Array] a message or a array of expected messages
     # @return [Mock]
     #
-    def receive expected_messages
-      __expected_messages__.push([Array(expected_messages), Mock.new(@object)]).last.last
+    def receive *expected_messages
+      __mocks__.push(Mock.new(@object, expected_messages, @assert)).last
     end
     alias to_receive receive
 
-    def __validate_expected_messages__
-      __expected_messages__.each do |(expected_messages,mock)|
-        expected_messages.each do |expected_message|
-          if @assert
-            __assert_message_received__(expected_message, mock)
-          else
-            __refute_message_received__(expected_message, mock)
-          end
-        end
-      end
+    def __validate_mocks__
+      __mocks__.each(&:__validate__)
     end
 
     private
-    def __assert_message_received__ expected_message, mock
-      Kernel.throw(:__tiramisu_status__,
-        Failures::ExpectedMessageNotReceived.new(expected_message, @object, @caller)
-      ) unless mock.__received_messages__[expected_message]
-    end
-
-    def __refute_message_received__ expected_message, mock
-      Kernel.throw(:__tiramisu_status__,
-        Failures::UnexpectedMessageReceived.new(expected_message, @object, @caller)
-      ) if mock.__received_messages__[expected_message]
-    end
-
-    def __expected_messages__
-      @__expected_messages__ ||= []
+    def __mocks__
+      @__mocks__ ||= []
     end
 
     def __assert__ message, arguments, block
