@@ -145,22 +145,26 @@ module Tiramisu
     def __validate_expected_messages__
       __expected_messages__.each do |(expected_messages,mock)|
         expected_messages.each do |expected_message|
-          __validate_expected_message__(expected_message, mock)
+          if @assert
+            __assert_message_received__(expected_message, mock)
+          else
+            __refute_message_received__(expected_message, mock)
+          end
         end
       end
     end
 
     private
-    def __validate_expected_message__ expected_message, mock
-      if @assert
-        Kernel.throw(:__tiramisu_status__,
-          Failures::ExpectedMessageNotReceived.new(expected_message, @object, @caller)
-        ) unless mock.__received_messages__[expected_message]
-      else
-        Kernel.throw(:__tiramisu_status__,
-          Failures::UnexpectedMessageReceived.new(expected_message, @object, @caller)
-        ) if mock.__received_messages__[expected_message]
-      end
+    def __assert_message_received__ expected_message, mock
+      Kernel.throw(:__tiramisu_status__,
+        Failures::ExpectedMessageNotReceived.new(expected_message, @object, @caller)
+      ) unless mock.__received_messages__[expected_message]
+    end
+
+    def __refute_message_received__ expected_message, mock
+      Kernel.throw(:__tiramisu_status__,
+        Failures::UnexpectedMessageReceived.new(expected_message, @object, @caller)
+      ) if mock.__received_messages__[expected_message]
     end
 
     def __expected_messages__
