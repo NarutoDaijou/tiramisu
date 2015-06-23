@@ -17,8 +17,10 @@ module Tiramisu
       __register_and_send__(m, a, b)
     end
 
-    def with *args
-      @assert || Kernel.raise(StandardError, '`with` only works with positive assertions')
+    def with *args, &block
+      @assert || Kernel.raise(StandardError, '`with` works only with positive assertions')
+      args.any? && block && Kernel.raise(ArgumentError, 'both arguments and block given, please use either one')
+      return @with = block if block
       @with = if @expected_messages.size > 1
         args.size == @expected_messages.size ||
           Kernel.raise(ArgumentError, "Wrong number of arguments, #{args.size} for #{@expected_messages.size}")
@@ -28,6 +30,7 @@ module Tiramisu
       else
         [args]
       end
+      self
     end
 
     def __received_messages__
@@ -60,8 +63,17 @@ module Tiramisu
 
     def __assert_message_received_with_correct_arguments__ msg, i
       return unless @with
-      __received_messages__[msg].find do |(args,_)|
-      end || Kernel.throw(:__tiramisu_status__, Failures::Generic.new())
+      if @with.is_a?(Proc)
+        __received_messages__[msg].find {|(a,_)| @with.call(msg, a)} || Tiramisu.fail([
+          'Looks like :%s message never was called with expected arguments' % msg,
+          'See validation block'
+        ], @caller)
+      else
+        __received_messages__[msg].find {|(a,_)| a == @with[i]} || Tiramisu.fail([
+          'Looks like :%s message never was called with expected arguments:' % msg,
+          pp(@with[i])
+        ], @caller)
+      end
     end
 
     def __register_and_send__ m, a, b

@@ -97,6 +97,6 @@ module Kernel
   #
   def fail *reason
     reason.empty? && raise(ArgumentError, 'Wrong number or arguments, 0 for 1+')
-    throw(:__tiramisu_status__, Tiramisu::Failures::Generic.new(reason, caller[0]))
+    Tiramisu.fail(reason.flatten, caller[0])
   end
 end
