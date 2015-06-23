@@ -21,4 +21,15 @@ describe :receive_with do
       this.assert run(:test).reason.any? {|l| l =~ /Looks like :join message never was called with expected arguments/}
     end
   end
+
+  it 'should fail when called with wrong arguments' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect([]).to_receive(:join).with('')
+        mock.join('/')
+      end
+      this.assert run(:test).reason.any? {|l| l =~ /Looks like :join message never was called with expected arguments/}
+    end
+  end
 end
