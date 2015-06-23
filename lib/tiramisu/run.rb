@@ -41,7 +41,6 @@ module Tiramisu
         Failures::Assertion,
         Failures::ExpectedMessageNotReceived,
         Failures::UnexpectedMessageReceived
-      require 'tiramisu/pretty_print'
       render_caller(indent, failure.caller)
       __send__('render_%s_failure' % failure.class.name.split('::').last, indent, failure)
     else

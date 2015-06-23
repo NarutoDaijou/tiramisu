@@ -109,6 +109,7 @@ module Tiramisu
 end
 
 require 'tiramisu/core_ext'
+require 'tiramisu/pretty_print'
 require 'tiramisu/failures'
 require 'tiramisu/mock'
 require 'tiramisu/util'

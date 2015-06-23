@@ -71,7 +71,7 @@ module Tiramisu
       else
         __received_messages__[msg].find {|(a,_)| a == @with[i]} || Tiramisu.fail([
           'Looks like :%s message never was called with expected arguments:' % msg,
-          pp(@with[i])
+          Tiramisu.pp(@with[i])
         ], @caller)
       end
     end
