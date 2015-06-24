@@ -39,7 +39,7 @@ module Tiramisu
       render_exception(indent, failure)
     when GenericFailure, AssertionFailure
       render_caller(indent, failure.caller)
-      __send__('render_%s_failure' % failure.class.name.split('::').last, indent, failure)
+      __send__('render_%s' % failure.class.name.split('::').last, indent, failure)
     else
       progress.log(indent + failure.inspect)
     end
@@ -51,11 +51,11 @@ module Tiramisu
     pretty_backtrace(failure).each {|l| progress.log(indent + l)}
   end
 
-  def render_Generic_failure indent, failure
+  def render_GenericFailure indent, failure
     Array(failure.reason).each {|l| progress.log(indent + l.to_s)}
   end
 
-  def render_Assertion_failure indent, failure
+  def render_AssertionFailure indent, failure
     progress.log indent + cyan('a: ') + pp(failure.object)
     progress.log indent + cyan('b: ') + failure.arguments.map {|a| pp(a)}.join(', ')
   end

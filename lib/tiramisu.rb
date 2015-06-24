@@ -100,9 +100,9 @@ module Tiramisu
     end
   end
 
-  # same as Kernel.fail except it accepts a caller as last argument
+  # stop any code and report a failure
   def fail reason, caller
-    throw(:__tiramisu_status__, GenericFailure.new(reason, caller))
+    throw(:__tiramisu_status__, GenericFailure.new(Array(reason), caller))
   end
 
   def void_hooks

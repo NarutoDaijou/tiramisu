@@ -81,8 +81,7 @@ module Tiramisu
       else
         Tiramisu.refute_raised_as_expected(@block, type, message, block)
       end
-      return true if failure.nil?
-      GenericFailure.new(Array(failure), @caller)
+      Tiramisu.fail(failure, @caller) if failure
     end
     alias to_raise raise
 
