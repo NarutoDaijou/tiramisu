@@ -1,47 +1,66 @@
 describe :refute_throw do
-  def refute_throw *args, &block
-    catch :__tiramisu_status__ do
-      Tiramisu::Assert.new(nil, :refute, block).throw(*args)
+
+  it 'should pass when nothing thrown' do
+    this = self
+    spec rand do
+      test(:test) {refute {}.throw}
+      this.assert_equal :__tiramisu_passed__, run(:test)
     end
   end
 
-  it 'should pass when nothing thrown' do
-    r = refute_throw {}
-    assert_equal true, r
-  end
-
   it 'should fail when something thrown' do
-    r = refute_throw {throw :x}
-    assert r.reason.any? {|l| l =~ /Not expected a symbol to be thrown/}
+    this = self
+    spec rand do
+      test(:test) {refute {throw :x}.throw}
+      this.assert_equal Tiramisu::GenericFailure, run(:test).class
+    end
   end
 
   it 'should pass when thrown symbol does not match negated one' do
-    r = refute_throw(:x) {throw :y}
-    assert_equal true, r
+    this = self
+    spec rand do
+      test(:test) {refute {throw :x}.throw(:y)}
+      this.assert_equal :__tiramisu_passed__, run(:test)
+    end
   end
 
   it 'should fail when thrown symbol does match negated one' do
-    r = refute_throw(:x) {throw :x}
-    assert r.reason.any? {|l| l =~ /Not expected :x to be thrown/}
+    this = self
+    spec rand do
+      test(:test) {refute {throw :x}.throw(:x)}
+      this.assert_equal Tiramisu::GenericFailure, run(:test).class
+    end
   end
 
   it 'should pass when nor negated symbol nor value matching thrown ones' do
-    r = refute_throw(:a, :b) {throw :x, :y}
-    assert_equal true, r
+    this = self
+    spec rand do
+      test(:test) {refute {throw :x, :y}.throw(:a, :b)}
+      this.assert_equal :__tiramisu_passed__, run(:test)
+    end
   end
 
   it 'should fail when thrown symbol does match negated one but value does not' do
-    r = refute_throw(:x, :a) {throw :x, :b}
-    assert r.reason.any? {|l| l =~ /Not expected :x to be thrown/}
+    this = self
+    spec rand do
+      test(:test) {refute {throw :x, :z}.throw(:x, :y)}
+      this.assert_equal Tiramisu::GenericFailure, run(:test).class
+    end
   end
 
   it 'should fail when a negated symbol given and nothing thrown' do
-    r = refute_throw(:x) {}
-    assert r.reason.any? {|l| l =~ /Expected a symbol to be thrown/}
+    this = self
+    spec rand do
+      test(:test) {refute {}.throw(:x)}
+      this.assert_equal Tiramisu::GenericFailure, run(:test).class
+    end
   end
 
   it 'should fail when a negated value given and nothing thrown' do
-    r = refute_throw(nil, 'blah') {}
-    assert r.reason.any? {|l| l =~ /Expected a symbol to be thrown/}
+    this = self
+    spec rand do
+      test(:test) {refute {}.throw(nil, :y)}
+      this.assert_equal Tiramisu::GenericFailure, run(:test).class
+    end
   end
 end
