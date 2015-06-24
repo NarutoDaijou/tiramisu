@@ -10,6 +10,7 @@ module Tiramisu
 
   GenericFailure = Struct.new(:reason, :caller)
   AssertionFailure = Struct.new(:object, :arguments, :caller)
+
   Skip = Struct.new(:reason, :caller)
 
   INDENT = '  '.freeze

@@ -17,6 +17,12 @@ module Tiramisu
       __register_and_send__(m, a, b)
     end
 
+    # @example
+    #   test :some_test do
+    #     mock = assert(some_object).receive(:some_method).with(:some, :args)
+    #     # call `mock.some_method(:some, :args)` for test to pass
+    #   end
+    #
     def with *args, &block
       @assert || Kernel.raise(StandardError, '`with` works only with positive assertions')
       args.any? && block && Kernel.raise(ArgumentError, 'both arguments and block given, please use either one')

@@ -67,6 +67,7 @@ module Tiramisu
     #
     # @param label
     # @param &block
+    #
     def test label, &block
       return unless block
       tests[label] = Tiramisu.identity_string(:test, label, block)
@@ -162,6 +163,7 @@ module Tiramisu
     #
     #     # code here wont be executed
     #   end
+    #
     def skip reason = nil
       throw(:__tiramisu_skip__, Tiramisu::Skip.new(reason, caller[0]))
     end
