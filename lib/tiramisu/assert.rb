@@ -82,7 +82,7 @@ module Tiramisu
         Tiramisu.refute_raised_as_expected(@block, type, message, block)
       end
       return true if failure.nil?
-      Failures::Generic.new(Array(failure), @caller)
+      GenericFailure.new(Array(failure), @caller)
     end
     alias to_raise raise
 
@@ -119,7 +119,7 @@ module Tiramisu
         Tiramisu.refute_thrown_as_expected(@block, symbol, value)
       end
       return true if failure.nil?
-      Failures::Generic.new(Array(failure), @caller)
+      GenericFailure.new(Array(failure), @caller)
     end
 
     # check the tested object receives given message(s)
@@ -156,7 +156,7 @@ module Tiramisu
       object = @block ? @block.call : @object
       result = __send_message__(object, message, arguments, block)
       return true if (@assert && result) || (@refute && !result)
-      Kernel.throw(:__tiramisu_status__, Failures::Assertion.new(object, arguments, @caller))
+      Kernel.throw(:__tiramisu_status__, AssertionFailure.new(object, arguments, @caller))
     end
 
     def __send_message__ object, message, arguments, block

@@ -50,15 +50,17 @@ module Tiramisu
 
     private
     def __assert_message_received__ expected_message
-      Kernel.throw(:__tiramisu_status__,
-        Failures::ExpectedMessageNotReceived.new(expected_message, @object, @caller)
-      ) unless __received_messages__[expected_message]
+      Tiramisu.fail('Expected %s to receive %s message' % [
+        Tiramisu.pp(@object),
+        Tiramisu.pp(expected_message)
+      ], @caller) unless __received_messages__[expected_message]
     end
 
     def __refute_message_received__ expected_message
-      Kernel.throw(:__tiramisu_status__,
-        Failures::UnexpectedMessageReceived.new(expected_message, @object, @caller)
-      ) if __received_messages__[expected_message]
+      Tiramisu.fail('Not Expected %s to receive %s message' % [
+        Tiramisu.pp(@object),
+        Tiramisu.pp(expected_message)
+      ], @caller) if __received_messages__[expected_message]
     end
 
     def __assert_message_received_with_correct_arguments__ msg, i

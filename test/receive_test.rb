@@ -17,7 +17,7 @@ describe :receive do
       test :test do
         mock = expect(:x).to_receive(:class)
       end
-      this.assert run(:test).is_a?(Tiramisu::Failures::ExpectedMessageNotReceived)
+      this.assert run(:test).is_a?(Tiramisu::GenericFailure)
     end
   end
 
@@ -38,7 +38,7 @@ describe :receive do
         mock = fail_if(:x).receive(:class)
         mock.class
       end
-      this.assert run(:test).is_a?(Tiramisu::Failures::UnexpectedMessageReceived)
+      this.assert run(:test).is_a?(Tiramisu::GenericFailure)
     end
   end
 end

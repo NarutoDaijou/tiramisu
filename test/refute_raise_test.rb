@@ -17,25 +17,25 @@ describe :refute_raise do
 
   it 'should fail if exception raised when not expected' do
     r = refute_raise {x}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /A unexpected exception raised/}
   end
 
   it 'should fail if exception of specific type negated but nothing raised' do
     r = refute_raise(NameError) {}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Expected a exception to be raised/}
   end
 
   it 'should fail if exception with specific message negated but nothing raised' do
     r = refute_raise(nil, 'x') {}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Expected a exception to be raised/}
   end
 
   it 'should fail if a validation block provided but nothing raised' do
     r = refute_raise(proc {}) {}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Expected a exception to be raised/}
   end
 
@@ -46,7 +46,7 @@ describe :refute_raise do
 
   it 'should fail if it raises a exception of same type as negated one' do
     r = refute_raise(NameError) {x}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Not expected a NameError to be raised/}
   end
 
@@ -57,7 +57,7 @@ describe :refute_raise do
 
   it 'should fail if it raises a exception with a message matching negated one' do
     r = refute_raise(nil, /undefined local variable or method/) {x}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Not expected raised exception to match \/undefined/}
   end
 
@@ -68,13 +68,13 @@ describe :refute_raise do
 
   it 'should fail if raised type is of negated type' do
     r = refute_raise(NameError, /blah/) {x}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Not expected a NameError to be raised/}
   end
 
   it 'should fail if error message matches negated one' do
     r = refute_raise(ArgumentError, /undefined local variable or method/) {x}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Not expected raised exception to match \/undefined/}
   end
 end
