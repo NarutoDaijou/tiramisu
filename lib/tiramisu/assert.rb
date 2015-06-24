@@ -117,8 +117,7 @@ module Tiramisu
       else
         Tiramisu.refute_thrown_as_expected(@block, symbol, value)
       end
-      return true if failure.nil?
-      GenericFailure.new(Array(failure), @caller)
+      Tiramisu.fail(failure, @caller) if failure
     end
 
     # check the tested object receives given message(s)
