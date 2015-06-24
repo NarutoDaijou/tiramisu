@@ -37,7 +37,7 @@ module Tiramisu
     case failure
     when Exception
       render_exception(indent, failure)
-    when Failures::Generic, Failures::Assertion
+    when GenericFailure, AssertionFailure
       render_caller(indent, failure.caller)
       __send__('render_%s_failure' % failure.class.name.split('::').last, indent, failure)
     else

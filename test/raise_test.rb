@@ -17,7 +17,7 @@ describe :raise do
 
   it 'should fail if nothing raised' do
     r = assert_raise {}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Expected a exception to be raised/}
   end
 
@@ -28,7 +28,7 @@ describe :raise do
 
   it 'should fail if wrong exception raised' do
     r = assert_raise(ArgumentError) {x}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Expected a ArgumentError to be raised/}
   end
 
@@ -39,13 +39,13 @@ describe :raise do
 
   it 'should fail if message does not match' do
     r = assert_raise(NameError, /blah/) {x}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /to match/}
   end
 
   it 'should fail if nothing raised and validation block given' do
     r = assert_raise(proc {}) {}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /Expected a exception to be raised/}
   end
 
@@ -57,7 +57,7 @@ describe :raise do
   it 'should fail if  given block does not validate exception' do
     p = proc {|e| e.class == ArgumentError}
     r = assert_raise(p) {x}
-    assert r.class == Tiramisu::Failures::Generic
+    assert r.class == Tiramisu::GenericFailure
     assert r.reason.any? {|l| l =~ /did not raise as expected/}
   end
 end

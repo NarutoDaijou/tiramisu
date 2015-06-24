@@ -8,6 +8,8 @@ module Tiramisu
   DEFAULT_PATTERN = '{spec,test}/**/{*_spec.rb,*_test.rb}'.freeze
   GLOBAL_SETUPS = []
 
+  GenericFailure = Struct.new(:reason, :caller)
+  AssertionFailure = Struct.new(:object, :arguments, :caller)
   Skip = Struct.new(:reason, :caller)
 
   INDENT = '  '.freeze
@@ -100,7 +102,7 @@ module Tiramisu
 
   # same as Kernel.fail except it accepts a caller as last argument
   def fail reason, caller
-    throw(:__tiramisu_status__, Failures::Generic.new(reason, caller))
+    throw(:__tiramisu_status__, GenericFailure.new(reason, caller))
   end
 
   def void_hooks
@@ -110,7 +112,6 @@ end
 
 require 'tiramisu/core_ext'
 require 'tiramisu/pretty_print'
-require 'tiramisu/failures'
 require 'tiramisu/mock'
 require 'tiramisu/util'
 require 'tiramisu/unit'
