@@ -37,10 +37,7 @@ module Tiramisu
     case failure
     when Exception
       render_exception(indent, failure)
-    when Failures::Generic,
-        Failures::Assertion,
-        Failures::ExpectedMessageNotReceived,
-        Failures::UnexpectedMessageReceived
+    when Failures::Generic, Failures::Assertion
       render_caller(indent, failure.caller)
       __send__('render_%s_failure' % failure.class.name.split('::').last, indent, failure)
     else
@@ -61,20 +58,6 @@ module Tiramisu
   def render_Assertion_failure indent, failure
     progress.log indent + cyan('a: ') + pp(failure.object)
     progress.log indent + cyan('b: ') + failure.arguments.map {|a| pp(a)}.join(', ')
-  end
-
-  def render_ExpectedMessageNotReceived_failure indent, failure
-    progress.log indent + ('Expected %s to receive %s message' % [
-      pp(failure.object),
-      pp(failure.expected_message)
-    ])
-  end
-
-  def render_UnexpectedMessageReceived_failure indent, failure
-    progress.log indent + ('Not Expected %s to receive %s message' % [
-      pp(failure.object),
-      pp(failure.message)
-    ])
   end
 
   def render_caller indent, caller
