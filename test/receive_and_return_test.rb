@@ -44,4 +44,15 @@ describe :receive_and_return do
     end
   end
 
+  it 'should pass when all messages returned expected value' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect(1).to_receive(:+, :-).with([1], [1]).and_return(2, 0)
+        mock + 1
+        mock - 1
+      end
+      this.assert_equal :__tiramisu_passed__, run(:test)
+    end
+  end
 end
