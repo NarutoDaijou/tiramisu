@@ -10,8 +10,9 @@ module Tiramisu
     def with *args, &block
       @assert || Kernel.raise(StandardError, '`with` works only with positive assertions')
       args.any? && block && Kernel.raise(ArgumentError, 'both arguments and block given, please use either one')
-      return @with = block if block
-      @with = if @expected_messages.size > 1
+      @with = if block
+        block
+      elsif @expected_messages.size > 1
         args.size == @expected_messages.size ||
           Kernel.raise(ArgumentError, "Wrong number of arguments, #{args.size} for #{@expected_messages.size}")
         args.all? {|x| x.is_a?(Array)} ||
