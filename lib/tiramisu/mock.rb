@@ -29,6 +29,7 @@ module Tiramisu
           return __refute_message_received__(msg)
         end
         __assert_message_received_with_correct_arguments__(msg, i)
+        __assert_message_returned_correct_value__(msg, i)
       end
     end
 
@@ -48,8 +49,9 @@ module Tiramisu
     end
 
     def __register_and_send__ m, a, b
-      (__received_messages__[m] ||= []).push([a, b])
-      @object.__send__(m, *a, &b)
+      log = {arguments: a, block: b}
+      (__received_messages__[m] ||= []).push(log)
+      log[:returned] = @object.__send__(m, *a, &b)
     end
   end
 end

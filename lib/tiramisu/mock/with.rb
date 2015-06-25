@@ -27,12 +27,12 @@ module Tiramisu
     def __assert_message_received_with_correct_arguments__ msg, i
       return unless @with
       if @with.is_a?(Proc)
-        __received_messages__[msg].find {|(a,_)| @with.call(msg, a)} || Tiramisu.fail([
+        __received_messages__[msg].find {|log| @with.call(msg, log[:arguments])} || Tiramisu.fail([
           'Looks like :%s message never was called with expected arguments' % msg,
           'See validation block'
         ], @caller)
       else
-        __received_messages__[msg].find {|(a,_)| a == @with[i]} || Tiramisu.fail([
+        __received_messages__[msg].find {|log| log[:arguments] == @with[i]} || Tiramisu.fail([
           'Looks like :%s message never was called with expected arguments:' % msg,
           Tiramisu.pp(@with[i])
         ], @caller)
