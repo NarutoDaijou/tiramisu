@@ -90,4 +90,16 @@ describe :receive_with do
       this.assert_equal :__tiramisu_passed__, run(:test)
     end
   end
+
+  it 'should fail when block does validate arguments for some of received messages' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect(1).to_receive(:+, :-).with {false}
+        mock + 1
+        mock - 2
+      end
+      this.assert run(:test).reason.any? {|l| l =~ /Looks like :\+ message never was called with expected arguments/}
+    end
+  end
 end
