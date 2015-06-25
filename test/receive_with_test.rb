@@ -33,6 +33,18 @@ describe :receive_with do
     end
   end
 
+  it 'should pass when block validates arguments' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect(1).to_receive(:+).with {|_,a| a == [1]}
+        mock + 1
+      end
+      this.assert_equal :__tiramisu_passed__, run(:test)
+    end
+  end
+
+
   it 'should pass when all expected messages received with expected arguments' do
     this = self
     spec rand do
