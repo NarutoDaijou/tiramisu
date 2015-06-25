@@ -18,7 +18,7 @@ module Tiramisu
           Kernel.raise(ArgumentError, 'Please provide expected return values as arrays, one array per expected message')
         values
       else
-        [values]
+        values
       end
       self
     end
