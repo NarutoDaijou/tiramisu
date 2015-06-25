@@ -55,4 +55,16 @@ describe :receive_and_return do
       this.assert_equal :__tiramisu_passed__, run(:test)
     end
   end
+
+  it 'should fail when at least one message returns wrong value' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect(1).to_receive(:+, :-).with([1], [1]).and_return(2, 2)
+        mock + 1
+        mock - 1
+      end
+      this.assert run(:test).reason.any? {|l| l =~ /Looks like :\- message never returned expected value/}
+    end
+  end
 end
