@@ -80,4 +80,15 @@ describe :receive_and_return do
     end
   end
 
+  it 'should pass when block validate does not validate returned values' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect(1).to_receive(:+, :-).with([1], [1]).and_return {false}
+        mock + 1
+        mock - 1
+      end
+      this.assert run(:test).reason.any? {|l| l =~ /Looks like :\+ message never returned expected value/}
+    end
+  end
 end
