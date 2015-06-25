@@ -11,4 +11,14 @@ describe :receive_and_return do
     end
   end
 
+  it 'should fail when expected message returns wrong value' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect(:x).to_receive(:to_s).and_return(:y)
+        mock.to_s
+      end
+      this.assert run(:test).reason.any? {|l| l =~ /Looks like :to_s message never returned expected value/}
+    end
+  end
 end
