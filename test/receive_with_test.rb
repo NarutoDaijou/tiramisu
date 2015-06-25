@@ -44,4 +44,16 @@ describe :receive_with do
       this.assert_equal :__tiramisu_passed__, run(:test)
     end
   end
+
+  it 'should fail when at least one message received with wrong arguments' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect([]).to_receive(:include?, :concat).with([1], [[1]])
+        mock.include? 1
+        mock.concat [2]
+      end
+      this.assert run(:test).reason.any? {|l| l =~ /Looks like :concat message never was called with expected arguments/}
+    end
+  end
 end
