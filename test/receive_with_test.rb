@@ -78,4 +78,16 @@ describe :receive_with do
       this.assert run(:test).reason.any? {|l| l =~ /Looks like :concat message never was called with expected arguments/}
     end
   end
+
+  it 'should pass when block validates arguments for all received messages' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect(1).to_receive(:+, :-).with {|m,a| {:+ => [1], :- => [2]}[m] == a}
+        mock + 1
+        mock - 2
+      end
+      this.assert_equal :__tiramisu_passed__, run(:test)
+    end
+  end
 end
