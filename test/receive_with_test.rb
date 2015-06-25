@@ -32,4 +32,16 @@ describe :receive_with do
       this.assert run(:test).reason.any? {|l| l =~ /Looks like :join message never was called with expected arguments/}
     end
   end
+
+  it 'should pass when all expected messages received with expected arguments' do
+    this = self
+    spec rand do
+      test :test do
+        mock = expect([]).to_receive(:include?, :concat).with([1], [[1]])
+        mock.include? 1
+        mock.concat [1]
+      end
+      this.assert_equal :__tiramisu_passed__, run(:test)
+    end
+  end
 end
