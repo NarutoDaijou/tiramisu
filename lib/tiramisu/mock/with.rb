@@ -23,6 +23,7 @@ module Tiramisu
       self
     end
 
+    private
     def __assert_message_received_with_correct_arguments__ msg, i
       return unless @with
       if @with.is_a?(Proc)

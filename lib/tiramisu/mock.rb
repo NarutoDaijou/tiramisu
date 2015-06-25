@@ -55,3 +55,4 @@ module Tiramisu
 end
 
 require 'tiramisu/mock/with'
+require 'tiramisu/mock/return'
