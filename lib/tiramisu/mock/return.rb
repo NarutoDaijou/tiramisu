@@ -34,7 +34,7 @@ module Tiramisu
       else
         __received_messages__[msg].find {|log| log[:returned] == @return[i]} || Tiramisu.fail([
           'Looks like :%s message never returned expected value:' % msg,
-          Tiramisu.pp(@return[i])
+          Array(@return[i]).map {|x| Tiramisu.pp(x)}.join(', ')
         ], @caller)
       end
     end
