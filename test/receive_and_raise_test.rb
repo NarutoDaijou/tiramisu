@@ -81,4 +81,16 @@ describe :receive_and_raise do
       this.assert_match /undefined method .y. for :x:Symbol/, m
     end
   end
+
+  it 'should pass if all received messages raised as expected' do
+    this = self
+    spec rand do
+      test :test do
+        x = expect([]).to_receive(:y, :include?).and_raise(NoMethodError, ArgumentError)
+        x.y
+        x.include?
+      end
+      this.assert_equal :__tiramisu_passed__, run(:test)
+    end
+  end
 end
