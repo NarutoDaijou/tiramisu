@@ -93,4 +93,16 @@ describe :receive_and_raise do
       this.assert_equal :__tiramisu_passed__, run(:test)
     end
   end
+
+  it 'should fail if at least one message does not raise as expected' do
+    this = self
+    spec rand do
+      test :test do
+        x = expect([]).to_receive(:y, :include?).and_raise(NoMethodError, NameError)
+        x.y
+        x.include?
+      end
+      this.assert_match /Expected a NameError to be raised/, run(:test).reason[0]
+    end
+  end
 end
