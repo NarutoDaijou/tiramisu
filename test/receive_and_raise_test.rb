@@ -54,4 +54,15 @@ describe :receive_and_raise do
       this.assert_match /to match "blah"/, run(:test).reason[1]
     end
   end
+
+  it 'should pass if received message raises a error that match by type and message' do
+    this = self
+    spec rand do
+      test :test do
+        x = expect(:x).to_receive(:y).and_raise(NoMethodError, /undefined method `y' for :x:Symbol/)
+        x.y
+      end
+      this.assert_equal :__tiramisu_passed__, run(:test)
+    end
+  end
 end
