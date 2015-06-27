@@ -17,7 +17,7 @@ module Tiramisu
           Kernel.raise(ArgumentError, "Wrong number of arguments, #{expectations.size} for #{@expected_messages.size}")
         expectations
       else
-        expectations
+        [expectations]
       end
       self
     end

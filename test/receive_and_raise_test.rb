@@ -33,7 +33,7 @@ describe :receive_and_raise do
     end
   end
 
-  it 'should fail when received message does raises a unexpected error' do
+  it 'should fail when received message raises a unexpected error type' do
     this = self
     spec rand do
       test :test do
@@ -41,6 +41,17 @@ describe :receive_and_raise do
         x.y
       end
       this.assert_match /Expected a NameError to be raised/, run(:test).reason[0]
+    end
+  end
+
+  it 'should fail when error raised by received message is of expected type but error message does not match' do
+    this = self
+    spec rand do
+      test :test do
+        x = expect(:x).to_receive(:y).and_raise(NoMethodError, /blah/)
+        x.y
+      end
+      this.assert_match /to match "blah"/, run(:test).reason[1]
     end
   end
 end
