@@ -22,5 +22,14 @@ describe :receive_and_raise do
     end
   end
 
-
+  it 'should fail when received message does raises a unexpected error' do
+    this = self
+    spec rand do
+      test :test do
+        x = expect(:x).to_receive(:y).and_raise(NameError)
+        x.y
+      end
+      this.assert_match /Expected a NameError to be raised/, run(:test).reason[0]
+    end
+  end
 end
