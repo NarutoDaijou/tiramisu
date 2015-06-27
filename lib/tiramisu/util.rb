@@ -24,11 +24,15 @@ module Tiramisu
   end
 
   def readline caller
-    file, line = caller.split(/:(\d+):in.+/)
+    file, line = caller_to_source_location(caller)
     return unless file && line
     lines = ((@__readlinecache__ ||= {})[file] ||= File.readlines(file))
     return unless line = lines[line.to_i - 1]
     line.sub(/(do|\{)\Z/, '').strip
+  end
+
+  def caller_to_source_location caller
+    caller.split(/:(\d+):in.+/)
   end
 
   def load_files pattern_or_files
