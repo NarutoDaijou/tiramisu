@@ -65,4 +65,20 @@ describe :receive_and_raise do
       this.assert_equal :__tiramisu_passed__, run(:test)
     end
   end
+
+  it 'should pass if error raised by received message are validated by block' do
+    this, t, m = self, nil, nil
+    spec rand do
+      test :test do
+        x = expect(:x).to_receive(:y).and_raise {|_,e|
+          t, m = e.class, e.message
+          this.assert_match /undefined method .y. for :x:Symbol/, e.message
+        }
+        x.y
+      end
+      run(:test)
+      this.assert_equal NoMethodError, t
+      this.assert_match /undefined method .y. for :x:Symbol/, m
+    end
+  end
 end
