@@ -30,6 +30,7 @@ module Tiramisu
         end
         __assert_message_received_with_correct_arguments__(msg, i)
         __assert_message_returned_correct_value__(msg, i)
+        __assert_message_raised_as_expected__(msg, i)
       end
     end
 
@@ -62,3 +63,4 @@ end
 
 require 'tiramisu/mock/with'
 require 'tiramisu/mock/return'
+require 'tiramisu/mock/raise'

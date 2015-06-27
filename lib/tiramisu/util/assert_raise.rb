@@ -12,7 +12,7 @@ module Tiramisu
     raised_as_expected?(e, Tiramisu.relative_source_location(proc), expected_type, expected_message, block)
   end
 
-  def raised_as_expected? e, source_location, expected_type, expected_message, block
+  def raised_as_expected? e, source_location, expected_type = nil, expected_message = nil, block = nil
     f = assert_raised(e, source_location)
     return f if f
 
