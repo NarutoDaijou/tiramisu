@@ -9,8 +9,10 @@ module Tiramisu
       proc.call
     rescue Exception => e
     end
-    source_location = Tiramisu.relative_source_location(proc)
+    raised_as_expected?(e, Tiramisu.relative_source_location(proc), expected_type, expected_message, block)
+  end
 
+  def raised_as_expected? e, source_location, expected_type, expected_message, block
     f = assert_raised(e, source_location)
     return f if f
 
