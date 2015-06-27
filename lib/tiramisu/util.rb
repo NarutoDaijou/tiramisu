@@ -32,7 +32,8 @@ module Tiramisu
   end
 
   def caller_to_source_location caller
-    caller.split(/:(\d+):in.+/)
+    file, line = caller.split(/:(\d+):in.+/)
+    [relative_location(file), line]
   end
 
   def load_files pattern_or_files
