@@ -58,6 +58,7 @@ module Tiramisu
     #
     # @param label
     # @param &block
+    #
     def context label, &block
       return unless block
       Tiramisu.define_and_register_a_context(label, block, self)

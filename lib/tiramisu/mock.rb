@@ -51,7 +51,11 @@ module Tiramisu
     def __register_and_send__ m, a, b
       log = {arguments: a, block: b}
       (__received_messages__[m] ||= []).push(log)
-      log[:returned] = @object.__send__(m, *a, &b)
+      begin
+        log[:returned] = @object.__send__(m, *a, &b)
+      rescue Exception => e
+        log[:raised] = e
+      end
     end
   end
 end
