@@ -52,6 +52,10 @@ module Tiramisu
     def __register_and_send__ m, a, b
       log = {arguments: a, block: b}
       (__received_messages__[m] ||= []).push(log)
+      if @throw
+        expected_symbol = Array(@throw[@expected_messages.find_index {|x| x == m}]).first
+        return log[:thrown] = Tiramisu.catch_symbol(Kernel.proc {@object.__send__(m, *a, &b)}, expected_symbol)
+      end
       begin
         log[:returned] = @object.__send__(m, *a, &b)
       rescue Exception => e
@@ -64,3 +68,4 @@ end
 require 'tiramisu/mock/with'
 require 'tiramisu/mock/return'
 require 'tiramisu/mock/raise'
+require 'tiramisu/mock/throw'
