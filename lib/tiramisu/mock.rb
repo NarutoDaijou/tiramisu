@@ -31,6 +31,7 @@ module Tiramisu
         __assert_message_received_with_correct_arguments__(msg, i)
         __assert_message_returned_correct_value__(msg, i)
         __assert_message_raised_as_expected__(msg, i)
+        __assert_message_thrown_as_expected__(msg, i)
       end
     end
 
