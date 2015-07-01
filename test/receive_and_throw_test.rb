@@ -32,4 +32,15 @@ describe :receive_and_throw do
       this.assert_match /Expected a symbol to be thrown/, run(:test).reason[0]
     end
   end
+
+  it 'should fail when received message throws wrong symbol' do
+    this = self
+    spec rand do
+      test :test do
+        x = expect(Class.new {define_singleton_method(:y) {throw :z}}).to_receive(:y).and_throw(:a)
+        x.y
+      end
+      this.assert_match /Expected :a to be thrown/, run(:test).reason[0]
+    end
+  end
 end
