@@ -3,25 +3,23 @@ module Tiramisu
   def assert_thrown_as_expected proc, expected_symbol, expected_value
     thrown_symbol, thrown_value = Tiramisu.catch_symbol(proc, expected_symbol)
     thrown_as_expected?(
-      expected_symbol,
-      expected_value,
-      thrown_symbol,
-      thrown_value,
+      [expected_symbol, expected_value],
+      [thrown_symbol, thrown_value],
       Tiramisu.relative_source_location(proc)
     )
   end
 
-  def thrown_as_expected? expected_symbol, expected_value, thrown_symbol, thrown_value, source_location
-    f = assert_thrown(thrown_symbol, source_location)
+  def thrown_as_expected? expected, thrown, source_location
+    f = assert_thrown(thrown[0], source_location)
     return f if f
 
-    if expected_symbol
-      f = assert_expected_symbol_thrown(thrown_symbol, expected_symbol, source_location)
+    if expected[0]
+      f = assert_expected_symbol_thrown(thrown[0], expected[0], source_location)
       return f if f
     end
 
-    if expected_value
-      f = assert_expected_value_thrown(thrown_value, expected_value, source_location)
+    if expected[1]
+      f = assert_expected_value_thrown(thrown[1], expected[1], source_location)
       return f if f
     end
     nil
