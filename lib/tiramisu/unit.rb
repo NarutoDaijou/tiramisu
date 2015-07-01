@@ -1,5 +1,6 @@
 module Tiramisu
   class Unit
+
     # @example
     #   assert(x) == y
     #   assert(x).include?(y)

@@ -1,5 +1,6 @@
 module Tiramisu
   class Mock
+
     def initialize object, expected_messages, assert, caller
       @object = object
       @expected_messages = expected_messages.freeze

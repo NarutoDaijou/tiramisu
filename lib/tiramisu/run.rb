@@ -1,4 +1,5 @@
 module Tiramisu
+
   def progress
     @progress ||= TTY::ProgressBar.new ':current of :total [:bar]' do |cfg|
       cfg.total = units.map {|u| u.tests.size}.reduce(:+) || 0
