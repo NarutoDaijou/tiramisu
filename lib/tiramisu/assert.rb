@@ -119,6 +119,7 @@ module Tiramisu
       end
       Tiramisu.fail(failure, @caller) if failure
     end
+    alias to_throw throw
 
     # check the tested object receives given message(s)
     #
