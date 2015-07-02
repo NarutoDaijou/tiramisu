@@ -137,10 +137,14 @@ module Tiramisu
     #
     def receive *expected_messages
       mock = @block ? @block.call : @object
-      mock.is_a?(Tiramisu::Mock) || Kernel.raise(ArgumentError, '`receive` only works with mocks')
+      mock.__expected_messages__ rescue Kernel.raise(ArgumentError, '`receive` only works with predefined mocks')
       expected_messages.any? || Kernel.raise(ArgumentError, 'Wrong number of arguments, 0 for 1+')
       expected_messages.map!(&:to_sym)
-      mock.__send__(@assert ? :__expected_messages__ : :__unexpected_messages__).push(expected_messages)
+      if @assert
+        mock.__expected_messages__.push(expected_messages)
+      else
+        mock.__unexpected_messages__.push(expected_messages)
+      end
       mock
     end
     alias to_receive receive
