@@ -4,8 +4,9 @@ describe :receive do
     this = self
     spec rand do
       test :test do
-        mock = expect(:x).to_receive(:class)
-        mock.class
+        x = mock(:x)
+        expect(x).to_receive(:class)
+        x.class
       end
       this.assert_equal :__tiramisu_passed__, run(:test)
     end
@@ -15,7 +16,8 @@ describe :receive do
     this = self
     spec rand do
       test :test do
-        mock = expect(:x).to_receive(:class)
+        x = mock(:x)
+        expect(x).to_receive(:class)
       end
       this.assert_equal Tiramisu::GenericFailure, run(:test).class
     end
@@ -25,7 +27,8 @@ describe :receive do
     this = self
     spec rand do
       test :test do
-        mock = fail_if(:x).receive(:class)
+        x = mock(:x)
+        fail_if(x).receive(:class)
       end
       this.assert_equal :__tiramisu_passed__, run(:test)
     end
@@ -35,8 +38,9 @@ describe :receive do
     this = self
     spec rand do
       test :test do
-        mock = fail_if(:x).receive(:class)
-        mock.class
+        x = mock(:x)
+        fail_if(x).receive(:class)
+        x.class
       end
       this.assert_equal Tiramisu::GenericFailure, run(:test).class
     end
@@ -46,9 +50,10 @@ describe :receive do
     this = self
     spec rand do
       test :test do
-        mock = expect(:x).to_receive(:to_s, :inspect)
-        mock.to_s
-        mock.inspect
+        x = mock(:x)
+        expect(x).to_receive(:to_s, :inspect)
+        x.to_s
+        x.inspect
       end
       this.assert_equal :__tiramisu_passed__, run(:test)
     end
@@ -58,8 +63,9 @@ describe :receive do
     this = self
     spec rand do
       test :test do
-        mock = expect(:x).to_receive(:to_s, :inspect)
-        mock.inspect
+        x = mock(:x)
+        expect(x).to_receive(:to_s, :inspect)
+        x.inspect
       end
       this.assert_equal Tiramisu::GenericFailure, run(:test).class
     end
