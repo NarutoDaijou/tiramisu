@@ -12,11 +12,21 @@ module Tiramisu
       :refute
     ].each do |meth|
       define_method meth do |obj = nil, &block|
-        __assertions__.push(Tiramisu::Assert.new(obj, meth, block, caller[0])).last
+        Tiramisu::Assert.new(obj, meth, block, caller[0])
       end
     end
     alias expect assert
     alias fail_if refute
+
+    # wrap given object into a proxy that will register and pass all messages
+    #
+    # @example
+    #   user = mock(User.new)
+    #   expect(user).to_receive(:some_method)
+    #
+    def mock obj
+      __mocks__.push(Mock.new(obj, caller[0])).last
+    end
 
     # stop executing current test and mark it as skipped
     #
@@ -38,14 +48,15 @@ module Tiramisu
         __send__(test)
       end
       __send__(after) if after
-      __assertions__.each(&:__validate_mocks__)
+      __mocks__.each(&:__validate__)
       :__tiramisu_passed__
     rescue Exception => e
       throw(:__tiramisu_status__, e)
     end
 
-    def __assertions__
-      @__assertions__ ||= []
+    private
+    def __mocks__
+      @__mocks__ ||= []
     end
   end
 

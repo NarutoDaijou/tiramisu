@@ -3,12 +3,12 @@ module Tiramisu
 
     # ensure received message(s) throws expected symbol(s)/value(s)
     #
+    # @note if block given it will have precedence over arguments
+    #
     # @example
     #   x = expect(x).to_receive(:y).and_throw(:z)
     #
     def and_throw *expectations, &block
-      @assert || Kernel.raise(StandardError, '`and_throw` works only with positive assertions')
-      expectations.any? && block && Kernel.raise(ArgumentError, 'both arguments and block given, please use either one')
       @throw = if block
         block
       elsif @expected_messages.size > 1

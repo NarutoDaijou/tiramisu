@@ -121,36 +121,31 @@ module Tiramisu
     end
     alias to_throw throw
 
-    # check the tested object receives given message(s)
+    # ensure given mock will receive expected message(s) by the end of test
     #
     # @example
     #   test :auth do
-    #     user = assert(User.new).receive(:password)
+    #     user = mock(User.new)
+    #     expect(user).to_receive(:password)
     #     user.authenticate
-    #     # by the end of test user should receive :password message, otherwise the test will fail
+    #     # by the end of test user should receive :password message,
+    #     # otherwise the test will fail
     #   end
-    #
-    # @example alternate syntax
-    #   user = expect(User.new).to_receive(:password)
     #
     # @param [Symbol, Array] a message or a array of expected messages
     # @return [Mock]
     #
     def receive *expected_messages
+      mock = @block ? @block.call : @object
+      mock.is_a?(Tiramisu::Mock) || Kernel.raise(ArgumentError, '`receive` only works with mocks')
       expected_messages.any? || Kernel.raise(ArgumentError, 'Wrong number of arguments, 0 for 1+')
-      __mocks__.push(Mock.new(@object, expected_messages, @assert, @caller)).last
+      expected_messages.map!(&:to_sym)
+      mock.__send__(@assert ? :__expected_messages__ : :__unexpected_messages__).push(expected_messages)
+      mock
     end
     alias to_receive receive
 
-    def __validate_mocks__
-      __mocks__.each(&:__validate__)
-    end
-
     private
-    def __mocks__
-      @__mocks__ ||= []
-    end
-
     def __assert__ message, arguments, block
       object = @block ? @block.call : @object
       result = __send_message__(object, message, arguments, block)

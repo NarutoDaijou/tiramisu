@@ -1,22 +1,24 @@
 module Tiramisu
   class Mock
 
+    # ensure message(s) received with expected arguments
+    #
+    # @note if block given it will have precedence over arguments
+    #
     # @example
     #   test :some_test do
-    #     mock = assert(some_object).receive(:some_method).with(:some, :args)
-    #     # call `mock.some_method(:some, :args)` for test to pass
+    #     some_object = mock(SomeObject.new)
+    #     expect(some_object).to_receive(:some_method).with(:some, :args)
+    #     # call `some_object.some_method(:some, :args)` for test to pass
     #   end
     #
     def with *args, &block
-      @assert || Kernel.raise(StandardError, '`with` works only with positive assertions')
-      args.any? && block && Kernel.raise(ArgumentError, 'both arguments and block given, please use either one')
+      args.map! {|x| Array(x)}
       @with = if block
         block
       elsif @expected_messages.size > 1
         args.size == @expected_messages.size ||
           Kernel.raise(ArgumentError, "Wrong number of arguments, #{args.size} for #{@expected_messages.size}")
-        args.all? {|x| x.is_a?(Array)} ||
-          Kernel.raise(ArgumentError, 'Please provide expected arguments as arrays, one array per expected message')
         args
       else
         [args]

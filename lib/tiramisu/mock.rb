@@ -1,10 +1,8 @@
 module Tiramisu
   class Mock
 
-    def initialize object, expected_messages, assert, caller
+    def initialize object, caller
       @object = object
-      @expected_messages = expected_messages.freeze
-      @assert = assert
       @caller = caller
     end
 
@@ -18,21 +16,30 @@ module Tiramisu
       __register_and_send__(m, a, b)
     end
 
+    def __expected_messages__
+      @expected_messages ||= []
+    end
+
+    def __unexpected_messages__
+      @unexpected_messages ||= []
+    end
+
     def __received_messages__
       @__received_messages__ ||= {}
     end
 
     def __validate__
-      @expected_messages.each_with_index do |msg,i|
-        if @assert
+      __unexpected_messages__.each do |msgs|
+        msgs.each {|msg| __refute_message_received__(msg)}
+      end
+      __expected_messages__.each do |msgs|
+        msgs.each_with_index do |msg,i|
           __assert_message_received__(msg)
-        else
-          return __refute_message_received__(msg)
+          __assert_message_received_with_correct_arguments__(msg, i)
+          __assert_message_returned_correct_value__(msg, i)
+          __assert_message_raised_as_expected__(msg, i)
+          __assert_message_thrown_as_expected__(msg, i)
         end
-        __assert_message_received_with_correct_arguments__(msg, i)
-        __assert_message_returned_correct_value__(msg, i)
-        __assert_message_raised_as_expected__(msg, i)
-        __assert_message_thrown_as_expected__(msg, i)
       end
     end
 

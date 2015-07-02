@@ -1,15 +1,15 @@
 module Tiramisu
   class Mock
 
-    # ensure received message(s) raised as expected
+    # ensure received message(s) raised as expected.
+    #
+    # @note if block given it will have precedence over arguments
     #
     # @example
     #   x = expect(:x).to_receive(:y).and_raise(NoMethodError)
     #   # call `x.y` for test to pass
     #
     def and_raise *expectations, &block
-      @assert || Kernel.raise(StandardError, '`and_raise` works only with positive assertions')
-      expectations.any? && block && Kernel.raise(ArgumentError, 'both arguments and block given, please use either one')
       @raise = if block
         block
       elsif @expected_messages.size > 1
