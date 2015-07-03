@@ -4,7 +4,8 @@ describe :receive_and_raise do
     this = self
     spec rand do
       test :test do
-        x = expect(:x).to_receive(:y).and_raise(NoMethodError)
+        x = mock(:x)
+        expect(x).to_receive(:y).and_raise(NoMethodError)
         x.y
       end
       this.assert_equal :__tiramisu_passed__, run(:test)
@@ -15,7 +16,8 @@ describe :receive_and_raise do
     this = self
     spec rand do
       test :test do
-        x = expect(:x).to_receive(:y).and_raise
+        x = mock(:x)
+        expect(x).to_receive(:y).and_raise
         x.y
       end
       this.assert_equal :__tiramisu_passed__, run(:test)
@@ -26,7 +28,8 @@ describe :receive_and_raise do
     this = self
     spec rand do
       test :test do
-        x = expect(:x).to_receive(:to_s).and_raise
+        x = mock(:x)
+        expect(x).to_receive(:to_s).and_raise
         x.to_s
       end
       this.assert_match /Expected a exception to be raised/, run(:test).reason[0]
@@ -37,7 +40,8 @@ describe :receive_and_raise do
     this = self
     spec rand do
       test :test do
-        x = expect(:x).to_receive(:y).and_raise(NameError)
+        x = mock(:x)
+        expect(x).to_receive(:y).and_raise(NameError)
         x.y
       end
       this.assert_match /Expected a NameError to be raised/, run(:test).reason[0]
@@ -48,7 +52,8 @@ describe :receive_and_raise do
     this = self
     spec rand do
       test :test do
-        x = expect(:x).to_receive(:y).and_raise(NoMethodError, /blah/)
+        x = mock(:x)
+        expect(x).to_receive(:y).and_raise(NoMethodError, /blah/)
         x.y
       end
       this.assert_match /to match "blah"/, run(:test).reason[1]
@@ -59,7 +64,8 @@ describe :receive_and_raise do
     this = self
     spec rand do
       test :test do
-        x = expect(:x).to_receive(:y).and_raise(NoMethodError, /undefined method `y' for :x:Symbol/)
+        x = mock(:x)
+        expect(x).to_receive(:y).and_raise(NoMethodError, /undefined method `y' for :x:Symbol/)
         x.y
       end
       this.assert_equal :__tiramisu_passed__, run(:test)
@@ -70,7 +76,8 @@ describe :receive_and_raise do
     this, t, m = self, nil, nil
     spec rand do
       test :test do
-        x = expect(:x).to_receive(:y).and_raise {|_,e|
+        x = mock(:x)
+        expect(x).to_receive(:y).and_raise {|_,e|
           t, m = e.class, e.message
           this.assert_match /undefined method .y. for :x:Symbol/, e.message
         }
@@ -86,7 +93,8 @@ describe :receive_and_raise do
     this = self
     spec rand do
       test :test do
-        x = expect([]).to_receive(:y, :include?).and_raise(NoMethodError, ArgumentError)
+        x = mock([])
+        expect(x).to_receive(:y, :include?).and_raise(NoMethodError, ArgumentError)
         x.y
         x.include?
       end
@@ -98,7 +106,8 @@ describe :receive_and_raise do
     this = self
     spec rand do
       test :test do
-        x = expect([]).to_receive(:y, :include?).and_raise(NoMethodError, NameError)
+        x = mock([])
+        expect(x).to_receive(:y, :include?).and_raise(NoMethodError, NameError)
         x.y
         x.include?
       end
