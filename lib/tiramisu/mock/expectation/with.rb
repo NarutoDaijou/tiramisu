@@ -14,7 +14,6 @@ module Tiramisu
       #   end
       #
       def with *args, &block
-        args.map! {|x| Array(x)}
         @with = if block
           block
         elsif @expected_messages.size > 1
