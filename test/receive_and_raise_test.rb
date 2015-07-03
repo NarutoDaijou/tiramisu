@@ -32,7 +32,7 @@ describe :receive_and_raise do
         expect(x).to_receive(:to_s).and_raise
         x.to_s
       end
-      this.assert_match /Expected a exception to be raised/, run(:test).reason[0]
+      this.assert_match /Expected a exception to be raised/, run(:test).reason*' '
     end
   end
 
@@ -44,7 +44,7 @@ describe :receive_and_raise do
         expect(x).to_receive(:y).and_raise(NameError)
         x.y
       end
-      this.assert_match /Expected a NameError to be raised/, run(:test).reason[0]
+      this.assert_match /Expected a NameError to be raised/, run(:test).reason*' '
     end
   end
 
@@ -56,7 +56,7 @@ describe :receive_and_raise do
         expect(x).to_receive(:y).and_raise(NoMethodError, /blah/)
         x.y
       end
-      this.assert_match /to match "blah"/, run(:test).reason[1]
+      this.assert_match /to match "blah"/, run(:test).reason*' '
     end
   end
 
@@ -111,7 +111,7 @@ describe :receive_and_raise do
         x.y
         x.include?
       end
-      this.assert_match /Expected a NameError to be raised/, run(:test).reason[0]
+      this.assert_match /Expected a NameError to be raised/, run(:test).reason*' '
     end
   end
 end
