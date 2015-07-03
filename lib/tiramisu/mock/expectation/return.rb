@@ -7,7 +7,8 @@ module Tiramisu
       # @note if block given it will have precedence over arguments
       #
       # @example
-      #   n = expect(1).to_receive(:+).with(1).and_return(2)
+      #   n = mock(1)
+      #   expect(n).to_receive(:+).with(1).and_return(2)
       #
       def and_return *values, &block
         @return = if block

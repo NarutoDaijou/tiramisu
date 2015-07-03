@@ -7,7 +7,8 @@ module Tiramisu
       # @note if block given it will have precedence over arguments
       #
       # @example
-      #   x = expect(:x).to_receive(:y).and_raise(NoMethodError)
+      #   x = mock(X.new)
+      #   expect(x).to_receive(:y).and_raise(NoMethodError)
       #   # call `x.y` for test to pass
       #
       def and_raise *expectations, &block
