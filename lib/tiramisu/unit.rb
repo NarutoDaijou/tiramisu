@@ -25,7 +25,7 @@ module Tiramisu
     #   expect(user).to_receive(:some_method)
     #
     def mock obj
-      __mocks__.push(Mock.new(obj, caller[0])).last
+      __mocks__.push(Mock.new(obj)).last
     end
 
     # stop executing current test and mark it as skipped
@@ -48,7 +48,7 @@ module Tiramisu
         __send__(test)
       end
       __send__(after) if after
-      __mocks__.each(&:__validate__)
+      __mocks__.each(&:__tiramisu__validate_messages__)
       :__tiramisu_passed__
     rescue Exception => e
       throw(:__tiramisu_status__, e)
