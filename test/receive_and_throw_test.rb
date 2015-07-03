@@ -32,7 +32,7 @@ describe :receive_and_throw do
         expect(x).to_receive(:y).and_throw
         x.y
       end
-      this.assert_match /Expected a symbol to be thrown/, run(:test).reason[0]
+      this.assert_match /Expected a symbol to be thrown/, run(:test).reason*' '
     end
   end
 
@@ -44,7 +44,7 @@ describe :receive_and_throw do
         expect(x).to_receive(:y).and_throw(:a)
         x.y
       end
-      this.assert_match /Expected :a to be thrown/, run(:test).reason[0]
+      this.assert_match /Expected :a to be thrown/, run(:test).reason*' '
     end
   end
 
