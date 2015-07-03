@@ -20,7 +20,7 @@ describe :receive_and_return do
         expect(x).to_receive(:to_s).and_return(:y)
         x.to_s
       end
-      this.assert run(:test).reason.any? {|l| l =~ /Looks like :to_s message never returned expected value/}
+      this.assert_match /Looks like :to_s message never returned expected value/, run(:test).reason*' '
     end
   end
 
@@ -44,7 +44,7 @@ describe :receive_and_return do
         expect(x).to_receive(:+).with(1).and_return {false}
         x + 1
       end
-      this.assert run(:test).reason.any? {|l| l =~ /Looks like :\+ message never returned expected value/}
+      this.assert_match /Looks like :\+ message never returned expected value/, run(:test).reason*' '
     end
   end
 
@@ -70,7 +70,7 @@ describe :receive_and_return do
         x + 1
         x - 1
       end
-      this.assert run(:test).reason.any? {|l| l =~ /Looks like :\- message never returned expected value/}
+      this.assert_match /Looks like :\- message never returned expected value/, run(:test).reason*' '
     end
   end
 
@@ -96,7 +96,7 @@ describe :receive_and_return do
         x + 1
         x - 1
       end
-      this.assert run(:test).reason.any? {|l| l =~ /Looks like :\+ message never returned expected value/}
+      this.assert_match /Looks like :\+ message never returned expected value/, run(:test).reason*' '
     end
   end
 end
