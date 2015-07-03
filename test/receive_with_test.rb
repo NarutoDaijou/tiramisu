@@ -20,7 +20,7 @@ describe :receive_with do
         expect(x).to_receive(:join).with('')
         x.join
       end
-      this.assert run(:test).reason.any? {|l| l =~ /Looks like :join message never was called with expected arguments/}
+      this.assert_match /Looks like :join message never was called with expected arguments/, run(:test).reason*' '
     end
   end
 
@@ -32,7 +32,7 @@ describe :receive_with do
         expect(x).to_receive(:join).with('')
         x.join('/')
       end
-      this.assert run(:test).reason.any? {|l| l =~ /Looks like :join message never was called with expected arguments/}
+      this.assert_match /Looks like :join message never was called with expected arguments/, run(:test).reason*' '
     end
   end
 
@@ -56,7 +56,7 @@ describe :receive_with do
         expect(x).to_receive(:+).with {false}
         x + 1
       end
-      this.assert run(:test).reason.any? {|l| l =~ /Looks like :\+ message never was called with expected arguments/}
+      this.assert_match /Looks like :\+ message never was called with expected arguments/, run(:test).reason*' '
     end
   end
 
@@ -82,7 +82,7 @@ describe :receive_with do
         x.include? 1
         x.concat [2]
       end
-      this.assert run(:test).reason.any? {|l| l =~ /Looks like :concat message never was called with expected arguments/}
+      this.assert_match /Looks like :concat message never was called with expected arguments/, run(:test).reason*' '
     end
   end
 
@@ -108,7 +108,7 @@ describe :receive_with do
         x + 1
         x - 2
       end
-      this.assert run(:test).reason.any? {|l| l =~ /Looks like :\+ message never was called with expected arguments/}
+      this.assert_match /Looks like :\+ message never was called with expected arguments/, run(:test).reason*' '
     end
   end
 end
