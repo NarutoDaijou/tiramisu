@@ -7,7 +7,8 @@ module Tiramisu
       # @note if block given it will have precedence over arguments
       #
       # @example
-      #   x = expect(x).to_receive(:y).and_throw(:z)
+      #   x = mock(X.new)
+      #   expect(x).to_receive(:y).and_throw(:z)
       #
       def and_throw *expectations, &block
         @throw = if block
@@ -15,9 +16,9 @@ module Tiramisu
         elsif @expected_messages.size > 1
           expectations.size == @expected_messages.size ||
             Kernel.raise(ArgumentError, "Wrong number of arguments, #{expectations.size} for #{@expected_messages.size}")
-          Array(expectations)
+          expectations
         else
-          [Array(expectations)]
+          expectations
         end
         self
       end
@@ -32,7 +33,7 @@ module Tiramisu
         else
           source_location = Tiramisu.caller_to_source_location(@caller)
           received_messages[msg].each do |log|
-            next unless f = Tiramisu.thrown_as_expected?(@throw[i], log[:thrown], source_location)
+            next unless f = Tiramisu.thrown_as_expected?([@throw[i]], [log[:thrown]], source_location)
             Tiramisu.fail(f, @caller)
           end
         end
